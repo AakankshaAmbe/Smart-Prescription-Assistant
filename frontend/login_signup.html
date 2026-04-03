@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediSafe — Login / Signup</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="auth-wrapper">
+
+    <!-- ══ SIGNUP ══ -->
+    <div class="auth-card">
+      <h2>Create Account</h2>
+      <p class="auth-sub">Join MediSafe to manage your prescriptions</p>
+
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="signupName">Full Name</label>
+          <input id="signupName" type="text" placeholder="Anjali Patil" required />
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">Email</label>
+          <input id="signupEmail" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input id="signupPassword" type="password" placeholder="••••••••" required />
+        </div>
+        <div class="form-group">
+          <label for="signupPhone">Phone</label>
+          <input id="signupPhone" type="text" placeholder="9876543210" />
+        </div>
+        <button type="submit" id="signupBtn" class="btn-primary">Sign Up</button>
+        <p class="form-msg" id="signupMsg"></p>
+      </form>
+    </div>
+
+    <!-- ══ LOGIN ══ -->
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="auth-sub">Sign in to view your prescriptions</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" id="loginBtn" class="btn-primary">Sign In</button>
+        <p class="form-msg" id="loginMsg"></p>
+      </form>
+    </div>
+
+    
+
+  </div>
+
+  
+<script src="js/api.js"></script>
+</body>
+</html>
