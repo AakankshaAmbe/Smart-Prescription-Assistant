@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Smart Prescription Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e7edf3] dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-10 py-4">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1">medical_services</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl md:text-2xl font-bold leading-tight tracking-tight">Smart Prescription Assistant</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-11 px-5 bg-primary/10 text-primary text-base font-bold leading-normal transition-colors hover:bg-primary/20">
+<span class="truncate">Help Center</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-11 border-2 border-primary/20" data-alt="Doctor profile placeholder icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCu0BRA6fJyOrnW-mYk-dCk9iP3kxsCgTknRNHehIbFpFxKPMH2JTAi6NDSf_1X9RPPq38RKd7zkOpCEy6ZAaMLfDC4IyDPvbnjb1XTE7AcF4cj3cZIypqmhpygu3_6YlDj3EAnNYRaMyVWicUNyCPC1B42vyJjwjJamWyAE1YGch7miuHe63gwveXrnEIwV1LzyanIBri-k1X2o9fnKahgSp_PpbNG8ORcSmlgGmcmzH2c57O2fLa_JskHU5fJ9d-uZ5rpK3ALvBA");'></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex items-center justify-center p-4 md:p-8">
+<div class="w-full max-w-[520px] bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-100 dark:border-slate-800 p-8 md:p-12">
+<div class="text-center mb-10">
+<div class="inline-flex items-center justify-center p-3 bg-primary/10 text-primary rounded-full mb-6">
+<span class="material-symbols-outlined text-4xl">lock_open</span>
+</div>
+<h1 class="text-slate-900 dark:text-white tracking-tight text-3xl md:text-4xl font-bold leading-tight mb-3">Welcome Back</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
+                    Please enter your details to safely access your digital prescriptions.
+                </p>
+</div>
+<form class="space-y-6">
+<!-- Name or Phone Field -->
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-2 text-slate-900 dark:text-slate-200 text-lg font-semibold leading-normal" for="identifier">
+<span class="material-symbols-outlined text-primary text-xl">person</span>
+                        Name or Phone Number
+                    </label>
+<input class="form-input flex w-full rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-16 px-5 text-lg font-normal placeholder:text-slate-400 focus:border-primary transition-all" id="identifier" placeholder="e.g. 555-0123" required="" type="text"/>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="flex items-center gap-2 text-slate-900 dark:text-slate-200 text-lg font-semibold leading-normal" for="password">
+<span class="material-symbols-outlined text-primary text-xl">key</span>
+                            Password
+                        </label>
+<a class="text-primary text-base font-medium hover:underline" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<input class="form-input flex w-full rounded-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-16 px-5 text-lg font-normal placeholder:text-slate-400 focus:border-primary transition-all" id="password" placeholder="Enter your password" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Voice Assist Option -->
+<div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-dashed border-slate-300 dark:border-slate-700">
+<div class="size-10 bg-primary/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">record_voice_over</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium">Need help logging in?</p>
+<button class="text-primary text-sm font-bold hover:underline" type="button">Enable Voice Assistant</button>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-6 bg-primary text-white text-xl font-bold leading-normal tracking-wide shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-[0.98]" type="submit">
+<span class="truncate">LOG IN NOW</span>
+</button>
+</form>
+<div class="mt-8 text-center border-t border-slate-100 dark:border-slate-800 pt-8">
+<p class="text-slate-600 dark:text-slate-400 text-base">
+                    Don't have an account yet? 
+                    <a class="text-primary font-bold hover:underline ml-1" href="#">Create Account</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="p-6 text-center">
+<p class="text-slate-400 dark:text-slate-600 text-sm">
+            © 2024 Smart Prescription Assistant. Secure &amp; Private.
+        </p>
+</footer>
+</body></html>
