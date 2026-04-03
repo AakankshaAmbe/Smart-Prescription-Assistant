@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="mr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HealVoice AI - Regional Language &amp; Voice Output</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;family=Noto+Sans+Devanagari:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans Devanagari", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Lexend', 'Noto Sans Devanagari', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-slate-900 dark:text-slate-100">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-20 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary text-2xl">neurology</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">HealVoice AI</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">डॅशबोर्ड (Dashboard)</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">माझी औषधे (Prescriptions)</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">सेटिंग्ज (Settings)</a>
+</nav>
+<div class="size-10 rounded-full border-2 border-primary/20 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDW33mln7Sv-qdBBYNKoW1DLlZtgf13byWbdZqIbGuUenG-8mLZZfu1tq4aI41S98mdZUvrlsedibcIEiH1p7jhUYAmBDhg4v6DBYw-GxrXHfURNgmYioJ5bQlnkjZoF_I078tTWjbwJNr1IY3NqoxlXrfFxbpUrifA01J9wWmOZOJRSz2KJ4in0kvKuERv240DWIsXoTfgn2_xDzeprG73FieHVdTUqHTyH-ubEWTFPxmFVY6uZJp-uOHD3eZGp7X1doXLEIo-Vko');"></div>
+</div>
+</header>
+<main class="flex-1 flex justify-center py-8 px-4 md:px-20">
+<div class="max-w-[1000px] flex-1 flex flex-col gap-6">
+<!-- Breadcrumb and Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
+<span>मुख्यपृष्ठ (Home)</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-primary font-medium">प्रादेशिक आवाज सहाय्यक</span>
+</div>
+<h1 class="text-slate-900 dark:text-white text-3xl font-black leading-tight">तुमची प्रिस्क्रिप्शन माहिती</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg">प्रिस्क्रिप्शनची डिजिटल प्रत आणि मराठी ऑडिओ सारांश.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-xl h-12 px-6 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold hover:bg-slate-300 transition-all">
+<span class="material-symbols-outlined">image</span>
+                            मूळ फोटो पहा
+                        </button>
+</div>
+</div>
+<!-- Language Toggle Section (High Accessibility) -->
+<div class="bg-white dark:bg-slate-900 p-2 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex h-16 w-full items-center justify-center p-1">
+<label class="flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg px-4 transition-all hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 font-bold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">language</span>
+<span class="text-lg">English</span>
+</div>
+<input class="hidden" name="lang-toggle" type="radio" value="English"/>
+</label>
+<div class="w-[1px] h-8 bg-slate-200 dark:border-slate-700 mx-2"></div>
+<label class="flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg px-4 bg-primary text-white shadow-md font-bold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">record_voice_over</span>
+<span class="text-xl">मराठी (Marathi)</span>
+</div>
+<input checked="" class="hidden" name="lang-toggle" type="radio" value="Marathi"/>
+</label>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left: Full Audio Action -->
+<div class="lg:col-span-12">
+<div class="bg-primary/5 border-2 border-dashed border-primary/30 rounded-xl p-6 flex flex-col md:flex-row items-center gap-6">
+<div class="size-20 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/40 cursor-pointer hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-5xl">play_circle</span>
+</div>
+<div class="flex-1 text-center md:text-left">
+<h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-1">संपूर्ण प्रिस्क्रिप्शन ऐका (Play Full Summary)</h3>
+<p class="text-slate-600 dark:text-slate-400">डॉक्टरांनी दिलेल्या सर्व सूचना मराठी भाषेत एकाच वेळी ऐकण्यासाठी येथे क्लिक करा.</p>
+</div>
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400">speed</span>
+<span class="text-sm font-medium">वेग: सावकाश</span>
+</div>
+<div class="w-32 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-1/3"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Left: Digitized Text -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm h-full">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">description</span>
+                                    मूळ माहिती (Extracted Text)
+                                </h3>
+<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">AI Verified</span>
+</div>
+<div class="space-y-6">
+<div class="border-l-4 border-slate-200 dark:border-slate-700 pl-4">
+<p class="text-slate-400 text-sm font-bold uppercase tracking-widest">PATIENT NAME</p>
+<p class="text-lg font-semibold">रामचंद्र पाटील (Ramchandra Patil)</p>
+</div>
+<div class="border-l-4 border-slate-200 dark:border-slate-700 pl-4">
+<p class="text-slate-400 text-sm font-bold uppercase tracking-widest">DATE</p>
+<p class="text-lg font-semibold">२४ मे २०२४</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+<div class="flex items-center justify-between mb-2">
+<p class="text-slate-400 text-sm font-bold uppercase tracking-widest">DIAGNOSIS</p>
+<span class="material-symbols-outlined text-slate-300">stethoscope</span>
+</div>
+<p class="text-xl font-bold text-slate-800 dark:text-slate-200">उच्च रक्तदाब (Hypertension)</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Regional Voice Breakdown -->
+<div class="lg:col-span-7 flex flex-col gap-4">
+<h3 class="text-xl font-bold px-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">medication</span>
+                            औषधांचे विवरण (Medicine Instructions)
+                        </h3>
+<!-- Medicine Card 1 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">गोळी (Tablet)</span>
+<h4 class="text-xl font-bold">टॅब. अमलोप्रेस ५ मिग्रॅ</h4>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-lg mb-4 leading-relaxed">
+<span class="font-bold text-slate-900 dark:text-white">सूचना:</span> रोज सकाळी नाश्त्यानंतर एक गोळी कोमट पाण्यासोबत घ्यावी.
+                                    </p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-orange-600 bg-orange-50 dark:bg-orange-950/30 px-3 py-1 rounded-full text-sm font-bold">
+<span class="material-symbols-outlined text-sm">wb_sunny</span>
+                                            सकाळी
+                                        </div>
+<div class="flex items-center gap-1 text-slate-500 text-sm font-medium">
+<span class="material-symbols-outlined text-sm">schedule</span>
+                                            १५ दिवस
+                                        </div>
+</div>
+</div>
+<button class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-3xl">volume_up</span>
+</button>
+</div>
+</div>
+<!-- Medicine Card 2 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">गोळी (Tablet)</span>
+<h4 class="text-xl font-bold">टॅब. पॅरासिटामोल ६५० मिग्रॅ</h4>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-lg mb-4 leading-relaxed">
+<span class="font-bold text-slate-900 dark:text-white">सूचना:</span> ताप किंवा डोकेदुखी जाणवल्यास, जेवणानंतर घ्या. दोन गोळ्यांमध्ये किमान ६ तासांचे अंतर ठेवा.
+                                    </p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-blue-600 bg-blue-50 dark:bg-blue-950/30 px-3 py-1 rounded-full text-sm font-bold">
+<span class="material-symbols-outlined text-sm">medical_services</span>
+                                            गरज पडल्यास (SOS)
+                                        </div>
+</div>
+</div>
+<button class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-3xl">volume_up</span>
+</button>
+</div>
+</div>
+<!-- Medicine Card 3 (Syrup Example) -->
+<div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors group">
+<div class="flex items-start justify-between gap-4">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">सिरप (Syrup)</span>
+<h4 class="text-xl font-bold">म्युकेन जेल</h4>
+</div>
+<p class="text-slate-600 dark:text-slate-400 text-lg mb-4 leading-relaxed">
+<span class="font-bold text-slate-900 dark:text-white">सूचना:</span> दोन चमचे (१० मिली) जेवणापूर्वी अर्धा तास घ्या. बाटली नीट हलवून घ्या.
+                                    </p>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 text-purple-600 bg-purple-50 dark:bg-purple-950/30 px-3 py-1 rounded-full text-sm font-bold">
+<span class="material-symbols-outlined text-sm">restaurant</span>
+                                            जेवणापूर्वी
+                                        </div>
+</div>
+</div>
+<button class="size-16 rounded-xl bg-slate-100 dark:bg-slate-800 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-3xl">volume_up</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Support/Alert -->
+<div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900 rounded-xl p-6 mb-10">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-amber-600 text-3xl">warning</span>
+<div>
+<p class="text-amber-900 dark:text-amber-200 font-bold text-lg leading-tight">महत्वाची सूचना (Important Disclaimer)</p>
+<p class="text-amber-800/80 dark:text-amber-200/60 mt-1">हे AI द्वारे केलेले भाषांतर आहे. औषध घेण्यापूर्वी कृपया मूळ प्रिस्क्रिप्शन किंवा फार्मासिस्टशी खात्री करून घ्या.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Floating Voice Control (Visible when playing) -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[500px] bg-slate-900 text-white rounded-full p-2 shadow-2xl flex items-center justify-between border border-slate-700 hidden">
+<div class="flex items-center gap-3 pl-4">
+<div class="size-8 bg-primary rounded-full flex items-center justify-center animate-pulse">
+<span class="material-symbols-outlined text-sm">graphic_eq</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 font-bold uppercase tracking-widest">आता वाजत आहे</span>
+<span class="text-sm font-medium truncate max-w-[150px]">टॅब. अमलोप्रेस ५ मिग्रॅ...</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="size-10 rounded-full flex items-center justify-center hover:bg-slate-800">
+<span class="material-symbols-outlined">replay_10</span>
+</button>
+<button class="size-12 bg-white text-slate-900 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-3xl">pause</span>
+</button>
+<button class="size-10 rounded-full flex items-center justify-center hover:bg-slate-800 pr-4">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

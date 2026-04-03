@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Medication Alerts &amp; Reminders</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4 lg:px-20">
+<div class="flex items-center gap-4">
+<div class="text-primary size-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl">health_metrics</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">HealthAssist AI</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-bold text-primary border-b-2 border-primary pb-1" href="#">Reminders</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">My Meds</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">History</a>
+</nav>
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile picture of an elderly woman smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAFhyUe3rozg2fqQ4D0kvbGvI50qmd_P3I9HEC1AkqFA-yzsgrILiBfcK_j22q4YkDXvnsSEcnNtvx_ptWbAmjV0WbzcCDohQ03QN-1u1JgR_RzqyTqm_rK4lwmQM7MgBkTez7ZAzs-Ir0YPQIBlo7DLtSfC05PoDwmfVkkYnhpvM4UzeGWBT2Z3cntkIwzxEhEtCcBVZi8ioONFSA5tw_DM_IOaIWgXnUAig_rfvdFc49lnK_zWUbqgipisU9UNECgHiyYLsoLH2M");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:px-10 lg:py-12">
+<!-- Page Title Section -->
+<div class="flex flex-wrap items-end justify-between gap-6 mb-10">
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tighter">Medication Schedule</h1>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+<p class="text-lg font-medium">Today is Monday, October 23rd</p>
+</div>
+</div>
+<button class="flex items-center gap-2 px-6 h-14 bg-primary text-white rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined">document_scanner</span>
+<span>Digitize New Prescription</span>
+</button>
+</div>
+<!-- Active Reminders Status Card -->
+<div class="mb-10 @container">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 rounded-2xl border-2 border-primary/10 bg-white dark:bg-slate-900 p-8 shadow-sm">
+<div class="flex gap-5">
+<div class="size-14 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl">notifications_active</span>
+</div>
+<div class="flex flex-col gap-1">
+<p class="text-xl font-bold">Active Reminders Status</p>
+<p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed max-w-xl">
+                                Your automated regional voice alerts and SMS notifications are currently <span class="text-green-600 font-bold">active</span>. We will call you at the scheduled times.
+                            </p>
+</div>
+</div>
+<button class="w-full md:w-auto flex items-center justify-center gap-2 px-8 h-12 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-xl font-bold hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined">sms</span>
+<span>Send Test SMS</span>
+</button>
+</div>
+</div>
+<!-- Timeline Section -->
+<div class="space-y-8">
+<h2 class="text-2xl font-extrabold flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                    Upcoming Doses
+                </h2>
+<!-- Morning Dose -->
+<div class="relative pl-12 md:pl-16 border-l-4 border-primary/20 pb-10">
+<!-- Timeline Dot -->
+<div class="absolute -left-[14px] top-0 size-6 rounded-full bg-primary border-4 border-white dark:border-slate-900 shadow-sm"></div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+<span class="text-3xl font-black text-slate-900 dark:text-white bg-slate-200 dark:bg-slate-800 px-4 py-1 rounded-lg">9:00 AM</span>
+<div class="flex items-center gap-2 text-amber-600 font-bold bg-amber-50 dark:bg-amber-900/20 px-3 py-1 rounded-full text-sm">
+<span class="material-symbols-outlined text-lg">wb_sunny</span>
+                            Morning Routine
+                        </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Med Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/50 transition-all flex justify-between items-center group">
+<div class="flex items-center gap-5">
+<div class="size-14 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-4xl">pill</span>
+</div>
+<div>
+<h3 class="text-lg font-bold">Atorvastatin</h3>
+<p class="text-slate-500 dark:text-slate-400">1 Tablet (20mg)</p>
+<div class="flex items-center gap-1 mt-1 text-xs text-primary font-semibold">
+<span class="material-symbols-outlined text-sm">record_voice_over</span>
+                                        Voice Alert Enabled
+                                    </div>
+</div>
+</div>
+<button class="size-12 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-green-500 hover:border-green-500 hover:text-white transition-all text-slate-400">
+<span class="material-symbols-outlined">check</span>
+</button>
+</div>
+<!-- Med Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/50 transition-all flex justify-between items-center group">
+<div class="flex items-center gap-5">
+<div class="size-14 rounded-xl bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined text-4xl">pill</span>
+</div>
+<div>
+<h3 class="text-lg font-bold">Lisinopril</h3>
+<p class="text-slate-500 dark:text-slate-400">1 Tablet (10mg)</p>
+<div class="flex items-center gap-1 mt-1 text-xs text-primary font-semibold">
+<span class="material-symbols-outlined text-sm">record_voice_over</span>
+                                        Voice Alert Enabled
+                                    </div>
+</div>
+</div>
+<button class="size-12 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-green-500 hover:border-green-500 hover:text-white transition-all text-slate-400">
+<span class="material-symbols-outlined">check</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Night Dose -->
+<div class="relative pl-12 md:pl-16 border-l-4 border-slate-200 dark:border-slate-800">
+<!-- Timeline Dot -->
+<div class="absolute -left-[14px] top-0 size-6 rounded-full bg-slate-200 dark:bg-slate-700 border-4 border-white dark:border-slate-900 shadow-sm"></div>
+<div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+<span class="text-3xl font-black text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-4 py-1 rounded-lg">9:00 PM</span>
+<div class="flex items-center gap-2 text-indigo-600 font-bold bg-indigo-50 dark:bg-indigo-900/20 px-3 py-1 rounded-full text-sm">
+<span class="material-symbols-outlined text-lg">dark_mode</span>
+                            Evening Routine
+                        </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Med Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 opacity-75 hover:opacity-100 transition-all flex justify-between items-center group">
+<div class="flex items-center gap-5">
+<div class="size-14 rounded-xl bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-4xl">pill</span>
+</div>
+<div>
+<h3 class="text-lg font-bold">Metformin</h3>
+<p class="text-slate-500 dark:text-slate-400">1 Tablet (500mg)</p>
+<div class="flex items-center gap-1 mt-1 text-xs text-primary font-semibold">
+<span class="material-symbols-outlined text-sm">record_voice_over</span>
+                                        Voice Alert Enabled
+                                    </div>
+</div>
+</div>
+<button class="size-12 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-green-500 hover:border-green-500 hover:text-white transition-all text-slate-400">
+<span class="material-symbols-outlined">check</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Help/Info -->
+<footer class="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-sm">Need help? Hold down the help button on your device or call support at <span class="font-bold text-primary">1-800-CARE-AI</span></p>
+</footer>
+</main>
+</div>
+</body></html>
