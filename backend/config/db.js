@@ -1,12 +1,8 @@
 const { Pool } = require('pg');
-const dotenv = require('dotenv');
-const path = require('path');
-
-// Points to C:\Priyanka\Project\MediMate\.env.txt
-dotenv.config({ path: path.resolve(__dirname, '../../.env.txt') }); 
+require('dotenv').config();
 
 const pool = new Pool({
-    user: process.env.DB_USER,      // Should be 'postgres' or your DB username
+    user: process.env.DB_USER,
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
     password: String(process.env.DB_PASSWORD),
