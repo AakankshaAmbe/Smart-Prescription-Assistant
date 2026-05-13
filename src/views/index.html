@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediMate | Smart Prescription Analysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="intro">
+    <canvas id="intro-canvas"></canvas>
+    <div class="intro-logo-text">
+          <img src="/images/logo.png" class="intro-logo-icon" alt="Medicate Cross">
+        <div class="intro-logo-container">
+            <h1 class="intro-text">Medimate</h1>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top py-2.5">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <i class="bi bi-capsule-pill text-primary me-2" style="font-size: 1.5rem;"></i>
+            <span class="nav-brand-text">MediMate</span>
+        </a>
+        <div class="ms-auto d-flex gap-2">
+            <button class="btn btn-outline-secondary btn-login px-4" onclick="goToLogin()">Login</button>
+<button class="btn btn-primary btn-signup px-4" onclick="goToSignup()">Sign Up</button>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-wrapper">
+    <div class="hero-bg-overlay"></div>
+    
+    <div class="hero-floating-assets">
+        <img src="/images/img5.png" class="floating-img asset-left-top img-seq-1" alt="Asset 1">
+        <img src="/images/img2.png" class="floating-img asset-left-bottom img-seq-2" alt="Asset 2">
+        <img src="/images/img3.png" class="floating-img asset-right-top img-seq-3" alt="Asset 3">
+        <img src="/images/img1.png" class="floating-img asset-right-bottom img-seq-4" alt="Asset 4">
+    </div>
+
+    <div class="container hero-inner text-center">
+        <div class="hero-brand-bundle animate-1">
+            <i class="bi bi-heart-pulse-fill text-info" style="font-size: 2.5rem;"></i>
+            <h2 class="hero-main-title">MEDIMATE</h2>
+        </div>
+        
+        <h1 class="hero-sub-heading animate-2">
+            Smart Prescription <br> <span class="text-info">Analysis</span>
+        </h1>
+
+        <p class="hero-description animate-3">
+            Upload your prescription and get detailed medicine information in your <br> 
+            preferred language with text-to-speech support.
+        </p>
+        
+        <div class="hero-btns animate-4">
+    <button class="btn btn-info btn-lg px-5 py-3 rounded-0 fw-bold text-white me-3" onclick="scrollToUpload()">
+       + UPLOAD PRESCRIPTION
+    </button>
+
+    <button class="btn btn-outline-light btn-lg px-5 py-3 rounded-0 fw-bold" onclick="scrollToFeatures()">
+        LEARN MORE
+    </button>
+</div>
+    </div>
+</section>
+
+<section class="info-section py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="info-card p-4">
+                    <div class="info-icon-wrapper mb-3">
+                        <i class="bi bi-camera-reels text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="info-title">OCR Extraction</h3>
+                    <p class="info-text">
+                        Automated extraction of medicine details from your prescription images using advanced computer vision technology.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card p-4">
+                    <div class="info-icon-wrapper mb-3">
+                        <i class="bi bi-translate text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="info-title">Regional Translation</h3>
+                    <p class="info-text">
+                        Get your medicine information in Marathi, Hindi, Tamil, and other regional languages for better understanding.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card p-4">
+                    <div class="info-icon-wrapper mb-3">
+                        <i class="bi bi-mic text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h3 class="info-title">Voice Output</h3>
+                    <p class="info-text">
+                        Listen to dosage instructions and medicine details with our integrated text-to-speech support.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ADD THIS BELOW info-section -->
+ 
+<section class="upload-section py-5" id="upload-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="upload-card shadow-lg border-0 p-5 text-center">
+                    <h2 class="fw-bold mb-3" style="color: var(--nav-dark);">Upload Prescription</h2>
+                    <p class="text-muted mb-4">Upload your prescription to analyze medicines automatically</p>
+
+                    <div class="upload-dropzone p-5 mb-3" onclick="document.getElementById('prescriptionFile').click()">
+                        <div class="upload-icon-container mb-3">
+                            <i class="bi bi-cloud-arrow-up text-primary" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="fw-bold">Drag and drop your prescription </h5>
+                        <p class="text-secondary small">or click to select an image/pdf</p>
+                        <input type="file" id="prescriptionFile" hidden accept="image/*,.pdf">
+                    </div>
+
+                    <div id="fileInfo" class="mb-4 d-none">
+                        <div class="alert alert-info py-2 d-inline-block">
+                            <i class="bi bi-file-earmark-check me-2"></i><span id="fileName">No file chosen</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow" onclick="handleAnalyze()">
+                        ANALYZE PRESCRIPTION
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="resultBox" class="mt-4"></div>
+    </div>
+</section>
+
+<footer class="footer-custom pt-5 pb-3">
+    <div class="container">
+        <div class="row align-items-center text-center text-md-start">
+            <div class="col-md-4 mb-4">
+                <div class="footer-logo d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+                    <i class="bi bi-capsule-pill text-info me-2" style="font-size: 2rem;"></i>
+                    <h3 class="m-0 fw-bold text-white">MediMate</h3>
+                </div>
+                <p class="text-light opacity-75">Smart Prescription Analysis powered by advanced OCR and AI technology.</p>
+            </div>
+            <div class="col-md-4 mb-4 text-center">
+                <h6 class="text-white fw-bold mb-3">Quick Links</h6>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#" class="text-light text-decoration-none opacity-75 footer-link">Home</a>
+                    <a href="#" class="text-light text-decoration-none opacity-75 footer-link">About</a>
+                    <a href="#" class="text-light text-decoration-none opacity-75 footer-link">Privacy</a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4 text-center text-md-end">
+                <h6 class="text-white fw-bold mb-3">Connect With Us</h6>
+                <div class="footer-socials d-flex justify-content-center justify-content-md-end gap-3">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-light opacity-25">
+        <p class="text-center text-light opacity-50 small mt-4">© 2026 MediMate Team. All rights reserved.</p>
+    </div>
+</footer>
+<script src="/js/script.js"></script>
+</body>
+</html>

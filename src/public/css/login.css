@@ -1,0 +1,128 @@
+/* MediMate Theme Variables */
+:root {
+    --primary-blue: #004795;
+    --accent-blue: #2da1f8;
+    --bg-light: #f8fafd;
+    --text-muted: #6c757d;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+.login-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 71, 149, 0.08);
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    transition: transform 0.3s ease;
+}
+
+/* Tab Navigation */
+.nav-tabs {
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    font-weight: 500;
+    border: none !important;
+    padding: 10px 30px;
+}
+
+.nav-link.active {
+    color: var(--primary-blue) !important;
+    border-bottom: 3px solid var(--primary-blue) !important;
+    background: none !important;
+}
+
+/* Form Elements */
+.form-label {
+    font-weight: 500;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    background-color: #fcfdfe;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 4px rgba(0, 71, 149, 0.1);
+    border-color: var(--accent-blue);
+    outline: none;
+}
+
+/* Primary Action Button */
+.btn-login {
+    background-color: var(--primary-blue);
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #003570;
+    transform: translateY(-2px);
+}
+
+.btn-login:active {
+    transform: scale(0.96);
+}
+
+/* --- USER FRIENDLY BACK OPTION --- */
+.back-home-container {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-back:hover {
+    color: var(--primary-blue);
+    background-color: rgba(0, 71, 149, 0.05);
+}
+
+/* Click Animation */
+.btn-back:active {
+    transform: scale(0.90);
+    background-color: rgba(0, 71, 149, 0.1);
+}
+
+.btn-back i {
+    transition: transform 0.2s ease;
+}
+
+.btn-back:hover i {
+    transform: translateX(-4px);
+}

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MediMate Results</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/results.css">
+</head>
+
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- HEADER -->
+<div class="top-bar">
+    <div class="logo">
+        <i class="bi bi-heart-pulse-fill"></i>
+        MediMate
+    </div>
+    <div>
+        <button class="btn btn-back btn-custom" onclick="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <button class="btn btn-logout btn-custom" onclick="logout()">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </button>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- TITLE -->
+    <div class="title-box">
+        <i class="bi bi-capsule-pill title-icon"></i>
+        <h2 class="page-title">Prescription Analysis</h2>
+        <p class="subtitle">AI-powered medicine extraction & smart recommendations</p>
+    </div>
+
+    <!-- LANGUAGE SELECTOR CARD -->
+    <div class="language-wrapper">
+        <div class="language-card">
+            <div class="language-option" id="langEnglish" onclick="setVoiceLanguage('english')">
+                <span class="lang-flag">🇬🇧</span>
+                <div>
+                    <div class="lang-name">English</div>
+                    <small class="lang-native">English</small>
+                </div>
+            </div>
+            <div class="language-option" id="langHindi" onclick="setVoiceLanguage('hindi')">
+                <span class="lang-flag">🇮🇳</span>
+                <div>
+                    <div class="lang-name">हिंदी</div>
+                    <small class="lang-native">Hindi</small>
+                </div>
+            </div>
+            <div class="language-option" id="langMarathi" onclick="setVoiceLanguage('marathi')">
+                <span class="lang-flag">🇮🇳</span>
+                <div>
+                    <div class="lang-name">मराठी</div>
+                    <small class="lang-native">Marathi</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden select for language storage -->
+    <select id="voiceLanguage" style="display: none;">
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <option value="marathi">Marathi</option>
+    </select>
+
+    <div id="loading" class="alert alert-info text-center loading-spinner">
+        <i class="bi bi-arrow-repeat spin"></i><br>
+        Processing your prescription...
+    </div>
+
+    <div id="results"></div>
+    
+    <div style="text-align:right; margin-bottom:15px;">
+        <div id="google_translate_element"></div>
+    </div>
+</div>
+
+<!-- REMINDER MODAL -->
+<!-- 🔔 REMINDER MODAL -->
+<div class="modal" id="resultReminderModal">
+<div class="modal-box">
+
+<h3 class="fw-bold mb-3">+ Add Reminder</h3>
+
+<!-- Medicine -->
+<div class="mb-3">
+<label>Medicine</label>
+<input type="text" id="r_medicineName" class="form-control">
+</div>
+
+<!-- Frequency -->
+<div class="mb-3">
+<label>Frequency</label>
+<select id="r_frequency" class="form-select" onchange="updateResultTimes()">
+    <option value="">Select</option>
+    <option value="1">Once a day</option>
+    <option value="2">Twice a day</option>
+    <option value="3">Thrice a day</option>
+    <option value="custom">Custom</option>
+</select>
+</div>
+
+<div id="r_customBox" style="display:none;">
+<input type="number" id="r_customCount" onchange="updateResultCustom()">
+</div>
+
+<div id="r_timeInputs"></div>
+
+<!-- Duration -->
+<div class="mb-3">
+<label>Duration</label>
+<input type="number" id="r_duration" class="form-control">
+</div>
+
+<!-- Language -->
+<div class="mb-3">
+<label>Language</label>
+<select id="r_language" class="form-select">
+    <option value="en">English</option>
+    <option value="hi">Hindi</option>
+    <option value="mr">Marathi</option>
+</select>
+</div>
+
+<div class="text-end">
+<button class="btn btn-secondary" onclick="closeResultModal()">Cancel</button>
+<button class="btn btn-primary" onclick="saveResultReminder()">Save</button>
+</div>
+
+</div>
+</div>
+
+
+<script src="/js/results.js"></script>
+
+<script>
+// ============ LANGUAGE SELECTOR FUNCTIONS ============
+function setVoiceLanguage(lang) {
+    const hiddenSelect = document.getElementById('voiceLanguage');
+    if (hiddenSelect) hiddenSelect.value = lang;
+    localStorage.setItem('preferredLanguage', lang);
+    
+    document.querySelectorAll('.language-option').forEach(opt => opt.classList.remove('active'));
+    if (lang === 'english') document.getElementById('langEnglish').classList.add('active');
+    if (lang === 'hindi') document.getElementById('langHindi').classList.add('active');
+    if (lang === 'marathi') document.getElementById('langMarathi').classList.add('active');
+    
+    const messages = {
+        english: "Voice language changed to English",
+        hindi: "आवाज भाषा हिंदी में बदल गई",
+        marathi: "व्हॉइस भाषा मराठीमध्ये बदलली"
+    };
+    if (typeof showToastMessage === 'function') {
+        showToastMessage(messages[lang], "success");
+    }
+    console.log("Language set to:", lang);
+}
+
+function getSelectedLanguage() {
+    const select = document.getElementById('voiceLanguage');
+    if (select && select.value) return select.value;
+    return localStorage.getItem('preferredLanguage') || 'english';
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'english';
+    setVoiceLanguage(savedLang);
+});
+
+// Navigation
+function goBack() { window.location.href = '/upload_prescription.html'; }
+function logout() { localStorage.clear(); sessionStorage.clear(); window.location.href = '/login.html'; }
+
+// Google Translate
+function loadGoogleTranslate() {
+    if (typeof google !== 'undefined' && google.translate) {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+}
+
+// Reminder modal functions
+
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+
+</body>
+</html>
