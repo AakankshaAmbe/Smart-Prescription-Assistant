@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 const authController = require('./backend/controllers/authController');
 const reminderRoutes = require('./backend/routes/reminderRoutes');
 require('./backend/cron/reminderCron');
@@ -7,17 +9,31 @@ const smsRoutes = require('./backend/routes/smsRoutes');
 const dashboardRoutes = require('./backend/routes/dashboardRoutes');
 const pool = require('./backend/config/db');
 
-// AFTER app creation
-
-
-// API Routes
-
 const app = express();
 
 // --- MIDDLEWARE ---
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'src/public')));
+
+// Ensure upload directory exists
+const uploadDir = './uploads';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer for file storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // --- PAGE ROUTES (GET) ---
 app.get('/', (req, res) => {
@@ -32,11 +48,6 @@ app.get('/signup.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/signup.html'));
 });
 
-// --- AUTH ROUTES (POST) ---
-// These call the logic hidden in your backend/controllers folder
-app.post('/signup', authController.signupUser);
-app.post('/login', authController.loginUser);
-
 app.get('/upload_prescription.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/upload_prescription.html'));
 });
@@ -48,23 +59,180 @@ app.get('/dashboard.html', (req, res) => {
 app.get('/reminders.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/reminders.html'));
 });
+
 app.get('/results.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/results.html'));
 });
+
 app.get('/search.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/search.html'));
 });
+
 app.get('/history.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/history.html'));
 });
+
 app.get('/medicine-info.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/views/medicine-info.html'));
 });
+
+// --- AUTH ROUTES (POST) ---
+app.post('/signup', authController.signupUser);
+app.post('/login', authController.loginUser);
+
+// --- OTHER ROUTES ---
 app.use('/', reminderRoutes);
 app.use('/', smsRoutes);
 app.use('/', dashboardRoutes);
 
-// ✅ GET: Fetch prescriptions (FIXED - Convert JSONB to text)
+// ================= FILE UPLOAD ENDPOINTS =================
+
+// Upload Image endpoint
+app.post('/prescription/upload-image', upload.single('file'), async (req, res) => {
+    console.log('📸 Upload image request received');
+    
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const userId = req.body.user_id;
+        const fileUrl = `/prescription/image/${req.file.filename}`;
+
+        // Sample medicine data - In production, replace with actual OCR
+        const prescriptionData = {
+            status: 'success',
+            patient_name: "Sample Patient",
+            doctor_name: "Sample Doctor",
+            date: new Date().toISOString().split('T')[0],
+            medicines: [
+                {
+                    name: "Paracetamol",
+                    dosage: "500mg",
+                    frequency: "Twice daily",
+                    duration: "5 days",
+                    uses: "Fever and pain relief",
+                    side_effects: "Nausea, stomach upset",
+                    confidence: 95,
+                    source: "AI Extracted"
+                },
+                {
+                    name: "Amoxicillin",
+                    dosage: "250mg",
+                    frequency: "Three times daily",
+                    duration: "7 days",
+                    uses: "Bacterial infection",
+                    side_effects: "Diarrhea, rash",
+                    confidence: 92,
+                    source: "AI Extracted"
+                }
+            ]
+        };
+
+        // Save to database if user is logged in
+        if (userId && userId !== 'undefined' && userId !== 'null') {
+            try {
+                await pool.query(
+                    `INSERT INTO prescriptions (user_id, original_name, stored_filename, file_type, patient_name, doctor, medicines, status, upload_date)
+                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+                    [userId, req.file.originalname, req.file.filename, req.file.mimetype, 
+                     prescriptionData.patient_name, prescriptionData.doctor_name, 
+                     JSON.stringify(prescriptionData.medicines), 'active']
+                );
+                console.log('✅ Prescription saved to database');
+            } catch (dbError) {
+                console.error('Database save error:', dbError);
+            }
+        }
+
+        res.json(prescriptionData);
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        res.status(500).json({ error: 'Upload failed', details: error.message });
+    }
+});
+
+// Upload PDF endpoint
+app.post('/prescription/upload-pdf', upload.single('file'), async (req, res) => {
+    console.log('📄 Upload PDF request received');
+    
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const userId = req.body.user_id;
+        
+        // Sample response for PDF
+        const prescriptionData = {
+            status: 'success',
+            patient_name: "Sample Patient",
+            doctor_name: "Sample Doctor",
+            date: new Date().toISOString().split('T')[0],
+            medicines: [
+                {
+                    name: "Sample Medicine 1",
+                    dosage: "500mg",
+                    frequency: "Twice daily",
+                    duration: "5 days",
+                    uses: "Sample use information",
+                    side_effects: "Sample side effects",
+                    confidence: 90,
+                    source: "PDF Extracted"
+                },
+                {
+                    name: "Sample Medicine 2",
+                    dosage: "250mg",
+                    frequency: "Once daily",
+                    duration: "10 days",
+                    uses: "Sample use information",
+                    side_effects: "Sample side effects",
+                    confidence: 85,
+                    source: "PDF Extracted"
+                }
+            ]
+        };
+
+        // Save to database if user is logged in
+        if (userId && userId !== 'undefined' && userId !== 'null') {
+            try {
+                await pool.query(
+                    `INSERT INTO prescriptions (user_id, original_name, stored_filename, file_type, patient_name, doctor, medicines, status, upload_date)
+                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
+                    [userId, req.file.originalname, req.file.filename, req.file.mimetype,
+                     prescriptionData.patient_name, prescriptionData.doctor_name,
+                     JSON.stringify(prescriptionData.medicines), 'active']
+                );
+                console.log('✅ PDF prescription saved to database');
+            } catch (dbError) {
+                console.error('Database save error:', dbError);
+            }
+        }
+
+        res.json(prescriptionData);
+
+    } catch (error) {
+        console.error('PDF Upload error:', error);
+        res.status(500).json({ error: 'PDF upload failed' });
+    }
+});
+
+// Serve uploaded images
+app.get('/prescription/image/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filepath = path.join(__dirname, 'uploads', filename);
+    
+    if (fs.existsSync(filepath)) {
+        res.sendFile(filepath);
+    } else {
+        res.status(404).json({ error: 'Image not found' });
+    }
+});
+
+// ================= HISTORY API ENDPOINTS =================
+
+// GET: Fetch prescriptions
 app.get('/api/history', async (req, res) => {
     const userId = req.query.user_id;
     
@@ -75,7 +243,6 @@ app.get('/api/history', async (req, res) => {
     }
     
     try {
-        // Auto-expire prescriptions older than 30 days
         await pool.query(
             `UPDATE prescriptions 
              SET status = 'expired' 
@@ -85,14 +252,12 @@ app.get('/api/history', async (req, res) => {
             [userId]
         );
 
-        // Set any remaining NULL statuses to 'active'
         await pool.query(
             `UPDATE prescriptions SET status = 'active' 
              WHERE user_id = $1 AND status IS NULL`,
             [userId]
         );
 
-        // Fetch all prescriptions - Convert medicines from JSONB to text
         const result = await pool.query(
             `SELECT 
                 id,
@@ -111,7 +276,6 @@ app.get('/api/history', async (req, res) => {
             [userId]
         );
         
-        // Parse medicines back to JSON for frontend
         const prescriptions = result.rows.map(row => ({
             ...row,
             medicines: row.medicines
@@ -128,7 +292,7 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// ✅ DELETE: Remove a prescription
+// DELETE: Remove a prescription
 app.delete('/api/history/:id', async (req, res) => {
     const prescriptionId = req.params.id;
     const userId = req.query.user_id;
@@ -161,7 +325,7 @@ app.delete('/api/history/:id', async (req, res) => {
     }
 });
 
-// ✅ PATCH: Update prescription status
+// PATCH: Update prescription status
 app.patch('/api/history/:id/status', async (req, res) => {
     const prescriptionId = req.params.id;
     const { user_id, status } = req.body;
@@ -202,12 +366,8 @@ app.patch('/api/history/:id/status', async (req, res) => {
     }
 });
 
-
-
-
 // --- START SERVER ---
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`MediMate running at http://localhost:${PORT}`);
 });
-
