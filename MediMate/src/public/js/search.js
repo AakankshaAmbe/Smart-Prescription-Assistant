@@ -4,11 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const drugName = params.get("drug");
     
     // =========================
-    // SIDEBAR LOGIC (FIXED)
+    // SIDEBAR LOGIC
     // =========================
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-
     const closeBtn = document.getElementById('closeMenuBtn');
     const openBtn = document.getElementById('openMenuBtn');
     const sidebarContent = document.getElementById('sidebarMenuContent');
@@ -33,19 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // SEARCH FUNCTION
     // =========================
     window.searchMedicine = async function () {
-
         const input = document.getElementById("searchInput").value.trim();
         const resultDiv = document.getElementById("result");
 
         if (!input) {
-            resultDiv.innerHTML = "⚠ Enter medicine name";
+            resultDiv.innerHTML = '<div class="alert alert-warning">⚠️ Enter medicine name</div>';
             return;
         }
 
-        resultDiv.innerHTML = "⏳ Searching...";
+        resultDiv.innerHTML = '<div class="alert alert-info">⏳ Searching...</div>';
 
         try {
-            // ✅ FIX: Use current domain instead of hardcoded localhost
             const API_BASE_URL = window.location.origin;
             
             const response = await fetch(`${API_BASE_URL}/search-medicine`, {
@@ -62,38 +59,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 resultDiv.innerHTML = `
                     <div class="result-card">
                         <h2>💊 ${safe(data.name)}</h2>
-
-                        <p><b>Uses:</b> ${safe(data.uses)}</p>
-                        <p><b>Dosage:</b> ${safe(data.dosage)}</p>
-                        <p><b>When to take:</b> ${safe(data.when_to_take)}</p>
-                        <p><b>Side Effects:</b> ${safe(data.side_effects)}</p>
-                        <p><b>Precautions:</b> ${safe(data.precautions)}</p>
-
-                        <p><b>🧠 Description:</b> ${safe(data.description)}</p>
-
-                        <p style="color:green;"><b>Confidence:</b> ${data.confidence}%</p>
+                        <p><strong>📖 Uses:</strong> ${safe(data.uses)}</p>
+                        <p><strong>💊 Dosage:</strong> ${safe(data.dosage)}</p>
+                        <p><strong>⏰ When to take:</strong> ${safe(data.when_to_take)}</p>
+                        <p><strong>⚠️ Side Effects:</strong> ${safe(data.side_effects)}</p>
+                        <p><strong>🛡️ Precautions:</strong> ${safe(data.precautions)}</p>
+                        <p><strong>🧠 Description:</strong> ${safe(data.description)}</p>
+                        <p style="color:green;"><strong>Confidence:</strong> ${data.confidence}%</p>
                     </div>
                 `;
             } else {
-                resultDiv.innerHTML = `<p style="color:red;">❌ ${data.message}</p>`;
+                resultDiv.innerHTML = `<div class="alert alert-warning">❌ ${data.message}</div>`;
             }
 
         } catch (error) {
-            console.error(error);
-            resultDiv.innerHTML = "❌ Backend error";
+            console.error("Search error:", error);
+            resultDiv.innerHTML = '<div class="alert alert-danger">❌ Backend error. Please try again.</div>';
         }
     };
     
     if (drugName) {
         const inputBox = document.getElementById("searchInput");
-        inputBox.value = drugName;
-        searchMedicine(); // now safe ✅
+        if (inputBox) {
+            inputBox.value = drugName;
+            setTimeout(() => searchMedicine(), 100);
+        }
     }
 });
 
-// =========================
-// SAFE FUNCTION
-// =========================
 function safe(value) {
     return value ? value : "Not available";
 }

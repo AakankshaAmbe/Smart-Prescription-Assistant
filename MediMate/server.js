@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
-const multer = require('multer');
 const fs = require('fs');
+const multer = require('multer');
 const authController = require('./backend/controllers/authController');
 const reminderRoutes = require('./backend/routes/reminderRoutes');
 require('./backend/cron/reminderCron');
@@ -87,7 +87,6 @@ app.use('/', dashboardRoutes);
 
 // ================= FILE UPLOAD ENDPOINTS =================
 
-// Upload Image endpoint
 app.post('/prescription/upload-image', upload.single('file'), async (req, res) => {
     console.log('📸 Upload image request received');
     
@@ -97,9 +96,7 @@ app.post('/prescription/upload-image', upload.single('file'), async (req, res) =
         }
 
         const userId = req.body.user_id;
-        const fileUrl = `/prescription/image/${req.file.filename}`;
-
-        // Sample medicine data - In production, replace with actual OCR
+        
         const prescriptionData = {
             status: 'success',
             patient_name: "Sample Patient",
@@ -129,7 +126,6 @@ app.post('/prescription/upload-image', upload.single('file'), async (req, res) =
             ]
         };
 
-        // Save to database if user is logged in
         if (userId && userId !== 'undefined' && userId !== 'null') {
             try {
                 await pool.query(
@@ -153,7 +149,6 @@ app.post('/prescription/upload-image', upload.single('file'), async (req, res) =
     }
 });
 
-// Upload PDF endpoint
 app.post('/prescription/upload-pdf', upload.single('file'), async (req, res) => {
     console.log('📄 Upload PDF request received');
     
@@ -164,7 +159,6 @@ app.post('/prescription/upload-pdf', upload.single('file'), async (req, res) => 
 
         const userId = req.body.user_id;
         
-        // Sample response for PDF
         const prescriptionData = {
             status: 'success',
             patient_name: "Sample Patient",
@@ -194,7 +188,6 @@ app.post('/prescription/upload-pdf', upload.single('file'), async (req, res) => 
             ]
         };
 
-        // Save to database if user is logged in
         if (userId && userId !== 'undefined' && userId !== 'null') {
             try {
                 await pool.query(
@@ -218,7 +211,6 @@ app.post('/prescription/upload-pdf', upload.single('file'), async (req, res) => 
     }
 });
 
-// Serve uploaded images
 app.get('/prescription/image/:filename', (req, res) => {
     const filename = req.params.filename;
     const filepath = path.join(__dirname, 'uploads', filename);
@@ -230,9 +222,82 @@ app.get('/prescription/image/:filename', (req, res) => {
     }
 });
 
+// ================= SEARCH MEDICINE ENDPOINT =================
+
+app.post('/search-medicine', async (req, res) => {
+    const { name } = req.body;
+    
+    console.log('🔍 Searching for medicine:', name);
+    
+    if (!name) {
+        return res.status(400).json({ error: 'Medicine name required' });
+    }
+    
+    try {
+        const medicines = {
+            'paracetamol': {
+                found: true,
+                name: 'Paracetamol',
+                uses: 'Fever and mild to moderate pain relief',
+                dosage: '500mg every 4-6 hours',
+                when_to_take: 'With or without food',
+                side_effects: 'Nausea, stomach upset, allergic reactions',
+                precautions: 'Do not exceed 4000mg per day.',
+                description: 'Paracetamol is a pain reliever and fever reducer.',
+                confidence: 95
+            },
+            'amoxicillin': {
+                found: true,
+                name: 'Amoxicillin',
+                uses: 'Bacterial infections',
+                dosage: '250mg - 500mg every 8 hours',
+                when_to_take: 'Take with food',
+                side_effects: 'Diarrhea, nausea, rash',
+                precautions: 'Complete full course.',
+                description: 'Amoxicillin is a penicillin-type antibiotic.',
+                confidence: 92
+            },
+            'ibuprofen': {
+                found: true,
+                name: 'Ibuprofen',
+                uses: 'Pain, inflammation, fever',
+                dosage: '200mg - 400mg every 6-8 hours',
+                when_to_take: 'Take with food or milk',
+                side_effects: 'Stomach pain, heartburn, nausea',
+                precautions: 'Not for long-term use.',
+                description: 'Ibuprofen is an NSAID anti-inflammatory drug.',
+                confidence: 94
+            }
+        };
+        
+        const searchTerm = name.toLowerCase().trim();
+        let result = medicines[searchTerm];
+        
+        if (!result) {
+            const keys = Object.keys(medicines);
+            const partialMatch = keys.find(key => key.includes(searchTerm) || searchTerm.includes(key));
+            if (partialMatch) {
+                result = medicines[partialMatch];
+            }
+        }
+        
+        if (result) {
+            res.json(result);
+        } else {
+            res.json({
+                found: false,
+                message: `Medicine "${name}" not found in our database.`
+            });
+        }
+        
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).json({ error: 'Search failed' });
+    }
+});
+
 // ================= HISTORY API ENDPOINTS =================
 
-// GET: Fetch prescriptions
 app.get('/api/history', async (req, res) => {
     const userId = req.query.user_id;
     
@@ -283,7 +348,7 @@ app.get('/api/history', async (req, res) => {
                 : []
         }));
         
-        console.log(`✅ Found ${prescriptions.length} prescriptions for user ${userId}`);
+        console.log(`✅ Found ${prescriptions.length} prescriptions`);
         res.json(prescriptions);
         
     } catch (err) {
@@ -292,7 +357,6 @@ app.get('/api/history', async (req, res) => {
     }
 });
 
-// DELETE: Remove a prescription
 app.delete('/api/history/:id', async (req, res) => {
     const prescriptionId = req.params.id;
     const userId = req.query.user_id;
@@ -308,7 +372,7 @@ app.delete('/api/history/:id', async (req, res) => {
         );
 
         if (check.rows.length === 0) {
-            return res.status(404).json({ error: 'Prescription not found or not yours' });
+            return res.status(404).json({ error: 'Prescription not found' });
         }
 
         await pool.query(
@@ -316,7 +380,7 @@ app.delete('/api/history/:id', async (req, res) => {
             [prescriptionId, userId]
         );
 
-        console.log(`✅ Deleted prescription ${prescriptionId} for user ${userId}`);
+        console.log(`✅ Deleted prescription ${prescriptionId}`);
         res.json({ success: true, message: 'Prescription deleted successfully' });
 
     } catch (err) {
@@ -325,22 +389,15 @@ app.delete('/api/history/:id', async (req, res) => {
     }
 });
 
-// PATCH: Update prescription status
 app.patch('/api/history/:id/status', async (req, res) => {
     const prescriptionId = req.params.id;
     const { user_id, status } = req.body;
-    
-    console.log('Received:', { prescriptionId, user_id, status });
     
     if (!user_id) {
         return res.status(400).json({ error: 'user_id required in body' });
     }
     
-    if (!status) {
-        return res.status(400).json({ error: 'status required in body' });
-    }
-    
-    if (!['active', 'completed', 'expired'].includes(status)) {
+    if (!status || !['active', 'completed', 'expired'].includes(status)) {
         return res.status(400).json({ error: 'Invalid status' });
     }
     
@@ -357,13 +414,53 @@ app.patch('/api/history/:id/status', async (req, res) => {
             return res.status(404).json({ error: 'Prescription not found' });
         }
         
-        console.log('Update successful:', result.rows[0]);
         res.json({ success: true, status: status });
         
     } catch (err) {
         console.error('Status update error:', err);
         res.status(500).json({ error: 'Failed to update status' });
     }
+});
+
+// ================= DUMMY API ENDPOINTS (for voice & card) =================
+
+app.post('/api/voice', async (req, res) => {
+    res.json({ message: 'Voice endpoint - Python backend required' });
+});
+
+app.post('/api/card', async (req, res) => {
+    res.json({ message: 'Card endpoint - Python backend required' });
+});
+
+app.get('/dashboard-stats', async (req, res) => {
+    const userId = req.query.user_id;
+    res.json({
+        success: true,
+        data: {
+            active: 0,
+            weeklyTaken: 0,
+            pending: 0,
+            adherence: 0,
+            weeklyChart: [],
+            prediction: { risk: 'LOW', missed: 0 }
+        }
+    });
+});
+
+app.get('/reminders', async (req, res) => {
+    res.json([]);
+});
+
+app.post('/add-reminder', async (req, res) => {
+    res.json({ success: true });
+});
+
+app.put('/update-reminder/:id', async (req, res) => {
+    res.json({ success: true });
+});
+
+app.delete('/delete-reminder/:id', async (req, res) => {
+    res.json({ success: true });
 });
 
 // --- START SERVER ---
