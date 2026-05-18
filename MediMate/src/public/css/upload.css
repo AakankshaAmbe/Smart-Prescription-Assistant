@@ -1,0 +1,338 @@
+:root {
+    --primary-blue: #004795;
+    --accent-blue: #2da1f8;
+    --sidebar-bg: #ffffff;
+    --main-bg: #f8fafd;
+    --text-muted: #6c757d;
+    --hover-bg: #f0f4f9;
+    --active-bg: #e6effc;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background-color: var(--main-bg);
+    margin: 0;
+    display: flex;
+}
+
+/* Sidebar Core */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid #eee;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+}
+
+/* Collapsed Sidebar State */
+.sidebar.collapsed {
+    width: 85px;
+    padding: 20px 10px;
+}
+
+.sidebar.collapsed .logo-text {
+    display: none;
+}
+
+.sidebar.collapsed .logo-section {
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Small Toggle Button */
+.btn-menu-toggle {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+#sidebarMenuContent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: #444;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.3s;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: var(--primary-blue);
+    color: white !important;
+}
+
+.mt-auto {
+    margin-top: auto !important;
+}
+
+/* Content Area */
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 40px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.main-content.expanded {
+    margin-left: 85px;
+    width: calc(100% - 85px);
+}
+
+.header-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 40px;
+}
+
+.btn-logout-top {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-logout-top:hover {
+    background-color: #003570;
+    transform: translateY(-2px);
+}
+
+.upload-card-container {
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 10px 30px rgba(0, 71, 149, 0.05);
+    display: flex;
+    gap: 40px;
+}
+
+.drop-zone {
+    flex: 1;
+    border: 2px dashed #dee2e6;
+    border-radius: 15px;
+    padding: 60px 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.drop-zone i { font-size: 3.5rem; color: var(--primary-blue); }
+
+.tips-card {
+    width: 350px;
+    background-color: #f1f6ff;
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.tips-card h5 { color: var(--primary-blue); font-weight: 600; }
+
+.tip-item { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; color: #555; }
+.tip-item i { color: var(--primary-blue); }
+
+.btn-action {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-top: 30px;
+}
+
+/* ============================================================
+   MOBILE HEADER
+   ============================================================ */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    z-index: 1500;
+    padding: 10px 16px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-family: 'Jost', sans-serif;
+}
+
+.mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-logout-btn {
+    background: none;
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Jost', sans-serif;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.mobile-logout-btn:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* ============================================================
+   MOBILE BOTTOM NAV
+   ============================================================ */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    z-index: 2000;
+    padding: 6px 0 10px;
+}
+
+.mobile-bottom-nav .nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+    color: #888;
+    text-decoration: none;
+    gap: 2px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    transition: 0.2s;
+    font-family: 'Jost', sans-serif;
+}
+
+.mobile-bottom-nav a i {
+    font-size: 20px;
+}
+
+.mobile-bottom-nav a.active,
+.mobile-bottom-nav a:hover {
+    color: var(--primary-blue);
+}
+
+/* ============================================================
+   RESPONSIVE — nothing above changed, only added below
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Show mobile UI */
+    .mobile-header { display: flex; }
+    .mobile-bottom-nav { display: block; }
+
+    /* Hide desktop sidebar */
+    .sidebar { display: none !important; }
+
+    /* Hide desktop header bar (logout top-right) */
+    .header-bar { display: none !important; }
+
+    /* Main content full width with space for fixed bars */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 80px 16px 90px !important;
+    }
+
+    /* Page title smaller */
+    .main-content h1 {
+        font-size: 1.5rem !important;
+    }
+
+    /* Upload card: stack vertically */
+    .upload-card-container {
+        flex-direction: column !important;
+        padding: 20px !important;
+        gap: 20px !important;
+    }
+
+    /* Drop zone compact */
+    .drop-zone {
+        padding: 36px 16px !important;
+    }
+
+    .drop-zone i {
+        font-size: 2.5rem !important;
+    }
+
+    .drop-zone h4 {
+        font-size: 1.1rem !important;
+    }
+
+    /* Tips card full width */
+    .tips-card {
+        width: 100% !important;
+        padding: 16px !important;
+    }
+
+    /* Analyze button full width */
+    .btn-action {
+        width: 100% !important;
+        padding: 14px !important;
+        font-size: 1rem !important;
+    }
+}

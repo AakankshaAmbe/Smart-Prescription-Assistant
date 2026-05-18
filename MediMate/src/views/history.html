@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History | MediMate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/history.css">
+</head>
+<body>
+
+<!-- ================= MOBILE HEADER (only visible on mobile) ================= -->
+<!-- ================= MOBILE HEADER ================= -->
+<div class="mobile-header" id="mobileHeader">
+    <div class="mobile-logo">
+        <i class="bi bi-heart-fill"></i>
+        <span>MediMate</span>
+    </div>
+    <div class="mobile-header-right">
+        <a href="/" class="mobile-logout-btn" id="logoutBtnMobile">
+            <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+    </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo-section">
+        <i class="bi bi-heart-fill"></i>
+        <span class="logo-text">MediMate</span>
+    </div>
+    <div id="sidebarMenuContent" class="d-flex flex-column h-100">
+    <ul class="nav-menu">
+        <li class="nav-item"><a href="/dashboard.html" class="nav-link">📊 Dashboard</a></li>
+        <li class="nav-item"><a href="/upload_prescription.html" class="nav-link">📤 Upload Prescription</a></li>
+        <li class="nav-item"><a href="/results.html" class="nav-link">📄 Results</a></li>
+        <li class="nav-item"><a href="/reminders.html" class="nav-link">🔔 Reminders</a></li>
+        <li class="nav-item"><a href="/history.html" class="nav-link active">🕘 History</a></li>
+        <li class="nav-item"><a href="/search.html" class="nav-link">🔍 Search Medicine</a></li>
+    </ul>
+    
+    <ul class="nav-menu">
+        <!-- keep your existing menu -->
+    </ul>
+
+    <div class="mt-auto">
+        <button class="btn btn-outline-secondary w-100 mb-2" id="closeMenuBtn">
+            <i class="bi bi-arrow-left-circle me-2"></i>Close Menu
+        </button>
+    </div>
+</div>
+<button class="btn-menu-toggle d-none" id="openMenuBtn">
+    <i class="bi bi-list"></i>
+    <div style="font-size:10px;">Menu</div>
+</button>
+</div>
+
+<div class="main-content" id="mainContent">
+    <div class="header-bar">
+        <h1 class="fw-bold" style="color: var(--primary-blue);">
+            <i class="bi bi-clock-history"></i> Prescription History
+        </h1>
+        <div class="d-flex gap-3">
+        <a href="/" class="btn-logout-top" id="logoutBtn">
+            <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+</div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="text-muted small fw-bold">Total Prescriptions</div>
+            <div class="stat-value text-primary" id="totalCount">0</div>
+            <div class="text-muted small">All time</div>
+        </div>
+        <div class="stat-card">
+            <div class="text-muted small fw-bold">This Month</div>
+            <div class="stat-value text-warning" id="thisMonthCount">0</div>
+            <div class="text-muted small">Uploaded this month</div>
+        </div>
+        <div class="stat-card">
+            <div class="text-muted small fw-bold">Adherence Rate</div>
+            <div class="stat-value text-success" id="adherenceRate">0%</div>
+            <div class="text-muted small">Completed prescriptions</div>
+        </div>
+        <div class="stat-card">
+            <div class="text-muted small fw-bold">Unique Medicines</div>
+            <div class="stat-value text-danger" id="uniqueMedicines">0</div>
+            <div class="text-muted small">Distinct medications</div>
+        </div>
+    </div>
+
+    <div class="filters-section">
+        <div class="filters-row">
+            <div class="filter-group">
+                <label><i class="bi bi-search"></i> Search</label>
+                <input type="text" id="searchInput" placeholder="Search by filename, doctor, medicine...">
+            </div>
+            <!-- ✅ Single specific date picker -->
+            <div class="filter-group">
+                <label><i class="bi bi-calendar"></i> Date</label>
+                <input type="date" id="dateFilter">
+            </div>
+            <div class="filter-group">
+                <label><i class="bi bi-filter"></i> Status</label>
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="expired">Expired</option>
+                </select>
+            </div>
+        </div>
+    </div>
+        
+            
+    <div id="timelineContainer" class="timeline">
+        <div class="loading">
+            <i class="bi bi-arrow-repeat spin"></i><br>
+            Loading prescriptions...
+        </div>
+    </div>
+</div>
+
+<!-- ========== MOBILE BOTTOM NAV ========== -->
+<div class="mobile-bottom-nav">
+    <div class="nav-items">
+        <a href="/dashboard.html">
+            <i class="bi bi-grid-fill"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/upload_prescription.html">
+            <i class="bi bi-upload"></i>
+            <span>Upload</span>
+        </a>
+        <a href="/results.html">
+            <i class="bi bi-file-text"></i>
+            <span>Results</span>
+        </a>
+        <a href="/reminders.html">
+            <i class="bi bi-bell-fill"></i>
+            <span>Reminders</span>
+        </a>
+        <a href="/history.html" class="active">
+            <i class="bi bi-clock-history"></i>
+            <span>History</span>
+        </a>
+        <a href="/search.html">
+            <i class="bi bi-search"></i>
+            <span>Search</span>
+        </a>
+    </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div id="previewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Prescription Preview</h3>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content" style="max-width:420px;width:420px;">
+        <div class="modal-header" style="background:#fff1f1;border-bottom:1px solid #fecaca;border-radius:24px 24px 0 0;">
+            <h3 style="color:#dc2626;font-size:1rem;">
+                <i class="bi bi-exclamation-triangle-fill"></i> Delete Prescription
+            </h3>
+            <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="padding:2rem;text-align:center;">
+            <i class="bi bi-trash3" style="font-size:2.5rem;color:#dc2626;margin-bottom:1rem;display:block;"></i>
+            <p style="font-size:1rem;color:#374151;margin-bottom:0.4rem;">Are you sure you want to delete</p>
+            <p style="font-weight:700;color:#111827;margin-bottom:0.75rem;word-break:break-all;" id="deleteFileName">this prescription</p>
+            <p style="font-size:0.82rem;color:#9ca3af;margin-bottom:1.75rem;">This action cannot be undone.</p>
+            <div style="display:flex;gap:1rem;justify-content:center;">
+                <button onclick="closeDeleteModal()"
+                    style="padding:0.65rem 1.6rem;border-radius:10px;border:1px solid #d1d5db;
+                           background:#fff;cursor:pointer;font-weight:600;font-family:'Jost',sans-serif;
+                           color:#374151;transition:0.2s;"
+                    onmouseover="this.style.background='#f3f4f6'"
+                    onmouseout="this.style.background='#fff'">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn"
+                    style="padding:0.65rem 1.6rem;border-radius:10px;border:none;
+                           background:#dc2626;color:#fff;cursor:pointer;font-weight:600;
+                           font-family:'Jost',sans-serif;transition:0.2s;display:flex;align-items:center;gap:6px;"
+                    onmouseover="this.style.background='#b91c1c'"
+                    onmouseout="this.style.background='#dc2626'">
+                    <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const API_BASE_URL = "http://localhost:8000";
+const NODE_BASE_URL = "http://localhost:3000";
+let allPrescriptions = [];
+let pendingDeleteId = null;
+
+// =========================
+// SIDEBAR TOGGLE (ADD THIS)
+// =========================
+const sidebar = document.getElementById('sidebar');
+const mainContent = document.getElementById('mainContent');
+const closeBtn = document.getElementById('closeMenuBtn');
+const openBtn = document.getElementById('openMenuBtn');
+const sidebarContent = document.getElementById('sidebarMenuContent');
+
+if (closeBtn && openBtn) {
+    closeBtn.onclick = () => {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('expanded');
+        sidebarContent.classList.add('d-none');
+        openBtn.classList.remove('d-none');
+    };
+
+    openBtn.onclick = () => {
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('expanded');
+        sidebarContent.classList.remove('d-none');
+        openBtn.classList.add('d-none');
+    };
+}
+
+// ============ LOGOUT ============
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.onclick = (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+    };
+}
+
+// ✅ MOBILE LOGOUT
+const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+if (logoutBtnMobile) {
+    logoutBtnMobile.onclick = (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+    };
+}
+
+// ============ TOGGLE STATUS ============
+async function toggleStatus(id, currentStatus) {
+    event.stopPropagation();
+    
+    let newStatus;
+    if (currentStatus === 'active') {
+        newStatus = 'completed';
+    } else if (currentStatus === 'completed') {
+        newStatus = 'active';
+    } else {
+        showToast('Expired prescriptions cannot be changed', 'error');
+        return;
+    }
+    
+    try {
+        const userId = localStorage.getItem('userId');
+        
+        const response = await fetch(`${NODE_BASE_URL}/api/history/${id}/status`, {
+            method: 'PATCH',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                user_id: userId,
+                status: newStatus
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Server error:', errorData);
+            throw new Error(errorData.error || 'Failed to update status');
+        }
+        
+        const prescription = allPrescriptions.find(p => p.id === id);
+        if (prescription) {
+            prescription.prescription_data.status = newStatus;
+        }
+        
+        updateStats();
+        applyFilters();
+        showToast(`Status changed to ${newStatus}`, 'success');
+        
+    } catch (error) {
+        console.error('Status toggle failed:', error);
+        showToast('Failed to update status', 'error');
+    }
+}
+
+// ============ APPLY FILTERS ============
+function applyFilters() {
+    const term = document.getElementById('searchInput').value.toLowerCase();
+    const dateFilter = document.getElementById('dateFilter').value;
+    const status = document.getElementById('statusFilter').value;
+
+    let filtered = [...allPrescriptions];
+
+    if (term) {
+        filtered = filtered.filter(p =>
+            p.displayName.toLowerCase().includes(term) ||
+            (p.prescription_data?.medicines || []).some(m => String(m).toLowerCase().includes(term)) ||
+            (p.prescription_data?.doctor || '').toLowerCase().includes(term)
+        );
+    }
+
+    if (dateFilter) {
+        filtered = filtered.filter(p => {
+            const uploadDate = new Date(p.upload_date).toISOString().split('T')[0];
+            return uploadDate === dateFilter;
+        });
+    }
+
+    if (status) {
+        filtered = filtered.filter(p => p.prescription_data?.status === status);
+    }
+
+    renderTimeline(filtered);
+}
+
+// ============ LOAD PRESCRIPTIONS ============
+async function loadPrescriptions() {
+    try {
+        const userId = localStorage.getItem('userId');
+        if (!userId) { 
+            window.location.href = '/login.html'; 
+            return; 
+        }
+
+        const response = await fetch(`${NODE_BASE_URL}/api/history?user_id=${userId}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        console.log('Raw data from server:', data);
+
+        allPrescriptions = data.map(p => {
+            let medicinesList = [];
+            if (p.medicines) {
+                if (Array.isArray(p.medicines)) {
+                    medicinesList = p.medicines;
+                } else if (typeof p.medicines === 'object') {
+                    medicinesList = [p.medicines];
+                } else if (typeof p.medicines === 'string') {
+                    try {
+                        medicinesList = JSON.parse(p.medicines);
+                    } catch(e) {
+                        medicinesList = [p.medicines];
+                    }
+                }
+            }
+            
+            const medicineNames = medicinesList.map(m => {
+                if (typeof m === 'object' && m !== null) {
+                    return m.name || m.medicine || Object.values(m)[0] || 'Unknown';
+                }
+                return String(m);
+            });
+            
+            return {
+                id: p.id,
+                displayName: p.original_name || p.filename || 'Prescription',
+                storedName: p.stored_filename || p.filename,
+                file_type: p.file_type || 'image/jpeg',
+                upload_date: p.upload_date || new Date().toISOString(),
+                prescription_data: {
+                    medicines: medicineNames,
+                    doctor: p.doctor || 'Not specified',
+                    status: p.status || 'active'
+                }
+            };
+        });
+
+        console.log('Mapped prescriptions:', allPrescriptions);
+        
+        updateStats();
+        applyFilters();
+
+    } catch (error) {
+        console.error('Failed to load prescriptions:', error);
+        document.getElementById('timelineContainer').innerHTML = `
+            <div class="empty-state">
+                <i class="bi bi-plug"></i><br>
+                Cannot load history<br>
+                <small>${error.message}</small>
+            </div>`;
+    }
+}
+
+// ============ STATS ============
+function updateStats() {
+    document.getElementById('totalCount').textContent = allPrescriptions.length;
+    const now = new Date();
+    const thisMonth = allPrescriptions.filter(p => {
+        const d = new Date(p.upload_date);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+    document.getElementById('thisMonthCount').textContent = thisMonth;
+    const completed = allPrescriptions.filter(p => p.prescription_data?.status === 'completed').length;
+    const adherence = allPrescriptions.length ? Math.round((completed / allPrescriptions.length) * 100) : 0;
+    document.getElementById('adherenceRate').textContent = `${adherence}%`;
+    const allMedicines = [];
+    allPrescriptions.forEach(p => {
+        if (p.prescription_data?.medicines) allMedicines.push(...p.prescription_data.medicines);
+    });
+    document.getElementById('uniqueMedicines').textContent = [...new Set(allMedicines)].length;
+}
+
+// ============ RENDER TIMELINE ============
+function renderTimeline(prescriptions) {
+    const container = document.getElementById('timelineContainer');
+
+    if (!prescriptions.length) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="bi bi-folder"></i><br>
+                No prescriptions found. Upload your first prescription!
+            </div>`;
+        return;
+    }
+
+    const grouped = {};
+    prescriptions.forEach(p => {
+        const date  = new Date(p.upload_date);
+        const year  = date.getFullYear();
+        const month = date.getMonth();
+        const day   = date.getDate();
+        if (!grouped[year]) grouped[year] = {};
+        if (!grouped[year][month]) grouped[year][month] = {};
+        if (!grouped[year][month][day]) grouped[year][month][day] = [];
+        grouped[year][month][day].push(p);
+    });
+
+    const monthNames = ['January','February','March','April','May','June',
+                        'July','August','September','October','November','December'];
+    let html = '';
+
+    Object.keys(grouped).sort((a, b) => b - a).forEach(year => {
+        html += `<div class="timeline-year"><div class="year-badge">${year}</div>`;
+
+        Object.keys(grouped[year]).sort((a, b) => b - a).forEach(month => {
+            html += `<div class="timeline-month">
+                        <div class="month-badge">
+                            <i class="bi bi-calendar"></i> ${monthNames[parseInt(month)]} ${year}
+                        </div>`;
+
+            Object.keys(grouped[year][month]).sort((a, b) => b - a).forEach(day => {
+                const sample = grouped[year][month][day][0];
+                const fullDate = new Date(sample.upload_date).toLocaleDateString('en-IN', {
+                    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+                });
+                html += `<div class="timeline-day">
+                            <div class="day-badge">
+                                <i class="bi bi-calendar2-day"></i> ${fullDate}
+                            </div>
+                            <div class="prescriptions-grid">
+                                ${grouped[year][month][day].map(p => renderCard(p)).join('')}
+                            </div>
+                         </div>`;
+            });
+
+            html += `</div>`;
+        });
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+// ============ RENDER CARD ============
+function renderCard(p) {
+    const isPDF = p.file_type === 'application/pdf';
+    const ext = isPDF ? 'PDF' : 'IMAGE';
+    const medicines = p.prescription_data?.medicines || [];
+    const doctor = p.prescription_data?.doctor || 'Not specified';
+    const status = p.prescription_data?.status || 'active';
+    const displayName = p.displayName || 'Prescription';
+    const shortName = displayName.length > 35 ? displayName.substring(0, 35) + '...' : displayName;
+    const imageUrl = `${API_BASE_URL}/prescription/image/${encodeURIComponent(p.storedName)}`;
+
+    const thumbnail = isPDF
+        ? `<div style="display:flex;align-items:center;justify-content:center;height:100%;
+                       background:linear-gradient(135deg,#ef4444,#dc2626);">
+               <i class="bi bi-file-pdf" style="font-size:3rem;color:white;"></i>
+           </div>`
+        : `<div id="bg_${p.id}" style="height:100%;background:linear-gradient(135deg,#004795,#0066cc);">
+               <img src="${imageUrl}" alt="${displayName}"
+                   style="width:100%;height:100%;object-fit:cover;border-radius:12px 12px 0 0;display:block;"
+                   onload="var el=document.getElementById('bg_${p.id}');if(el)el.style.background='none';"
+                   onerror="this.style.display='none';">
+           </div>`;
+
+    const medicineTags = medicines.map(m => {
+        let medicineName = String(m || 'Unknown').substring(0, 30);
+        const safe = medicineName.replace(/'/g, "\\'");
+        return `<span class="medicine-tag"
+                    onclick="event.stopPropagation();window.open('/search.html?drug='+encodeURIComponent('${safe}'),'_blank')">
+                    <i class="bi bi-capsule"></i> ${medicineName}
+                </span>`;
+    }).join('');
+
+    const safeStored = String(p.storedName || '').replace(/'/g, "\\'");
+    const safeDisplay = String(p.displayName || '').replace(/'/g, "\\'");
+    const safeType = String(p.file_type || '').replace(/'/g, "\\'");
+
+    const statusBadge = status === 'expired' 
+        ? `<span class="status-badge expired">
+               <i class="bi bi-exclamation-circle"></i> Expired
+           </span>`
+        : `<span class="status-badge ${status}" onclick="event.stopPropagation();toggleStatus(${p.id}, '${status}')">
+               <i class="bi bi-${status === 'completed' ? 'check-circle-fill' : 'play-circle'}"></i>
+               ${status}
+           </span>`;
+
+    return `
+        <div class="prescription-card" id="card_${p.id}"
+             onclick="viewPrescription(${p.id},'${safeStored}','${safeDisplay}','${safeType}')">
+            <div class="card-preview" style="padding:0;overflow:hidden;position:relative;">
+                <span class="file-type-badge">${ext}</span>
+                <button class="delete-btn" title="Delete prescription"
+                    onclick="event.stopPropagation();confirmDelete(${p.id},'${safeDisplay}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+                ${thumbnail}
+            </div>
+            <div class="card-content">
+                <div class="filename"><i class="bi bi-file-text"></i> ${shortName}</div>
+                <div class="upload-date">
+                    <i class="bi bi-calendar3"></i>
+                    ${new Date(p.upload_date).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'})}
+                </div>
+                <div class="medicines-list">${medicineTags || '<span class="text-muted">No medicines listed</span>'}</div>
+                <div class="prescription-details">
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="bi bi-person"></i> Doctor:</span>
+                        <span class="detail-value">${doctor}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="bi bi-check-circle"></i> Status:</span>
+                        ${statusBadge}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+}
+
+// ============ VIEW MODAL ============
+function viewPrescription(id, storedName, displayName, type) {
+    const modal     = document.getElementById('previewModal');
+    const modalBody = document.getElementById('modalBody');
+    document.getElementById('modalTitle').textContent = displayName;
+    const url = `${API_BASE_URL}/prescription/image/${encodeURIComponent(storedName)}`;
+
+    if (type === 'application/pdf') {
+        modalBody.innerHTML = `
+            <iframe src="${url}" width="100%" height="500px"
+                style="border:none;border-radius:12px;"></iframe>`;
+    } else {
+        modalBody.innerHTML = `
+            <div style="text-align:center;">
+                <img src="${url}" alt="${displayName}"
+                    style="max-width:100%;max-height:80vh;border-radius:12px;display:block;margin:0 auto;"
+                    onerror="this.outerHTML='<p style=\'color:red;padding:1rem;\'>⚠️ Image failed to load.<br><small>URL: ${url}</small></p>'">
+            </div>`;
+    }
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('previewModal').classList.remove('active');
+    document.getElementById('modalBody').innerHTML = '';
+}
+
+// ============ DELETE ============
+function confirmDelete(id, name) {
+    pendingDeleteId = id;
+    document.getElementById('deleteFileName').textContent = `"${name}"`;
+    document.getElementById('deleteModal').classList.add('active');
+}
+
+function closeDeleteModal() {
+    pendingDeleteId = null;
+    document.getElementById('deleteModal').classList.remove('active');
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    if (!pendingDeleteId) return;
+
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Deleting...';
+
+    try {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(`${NODE_BASE_URL}/api/history/${pendingDeleteId}?user_id=${userId}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        allPrescriptions = allPrescriptions.filter(p => p.id !== pendingDeleteId);
+        updateStats();
+        applyFilters();
+        closeDeleteModal();
+        showToast('Prescription deleted successfully.', 'success');
+
+    } catch (error) {
+        console.error('Delete failed:', error);
+        showToast('Failed to delete. Please try again.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-trash"></i> Delete';
+    }
+});
+
+// ============ TOAST ============
+function showToast(message, type = 'success') {
+    const existing = document.getElementById('toastMsg');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.id = 'toastMsg';
+    toast.style.cssText = `
+        position:fixed;bottom:2rem;right:2rem;z-index:9999;
+        padding:0.85rem 1.5rem;border-radius:12px;font-weight:600;
+        font-family:'Jost',sans-serif;font-size:0.92rem;
+        box-shadow:0 8px 24px rgba(0,0,0,0.15);
+        background:${type === 'success' ? '#16a34a' : '#dc2626'};color:#fff;
+        animation:slideUp 0.3s ease;display:flex;align-items:center;gap:8px;
+    `;
+    toast.innerHTML = `<i class="bi bi-${type === 'success' ? 'check-circle' : 'x-circle'}"></i> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+}
+
+// ============ FILTER EVENT LISTENERS ============
+document.getElementById('searchInput').addEventListener('input', () => applyFilters());
+document.getElementById('dateFilter').addEventListener('change', () => applyFilters());
+document.getElementById('statusFilter').addEventListener('change', () => applyFilters());
+
+// ============ CLOSE HANDLERS ============
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeDeleteModal(); }
+});
+document.getElementById('previewModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('previewModal')) closeModal();
+});
+document.getElementById('deleteModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
+});
+
+// ============ INIT ============
+loadPrescriptions();
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

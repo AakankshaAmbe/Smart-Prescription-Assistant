@@ -1,0 +1,12 @@
+.env
+node_modules/
+venv/
+__pycache__/
+*.log
+*.pkl
+uploads/
+.DS_Store
+backend/models/
+backend/python/models/
+uploads/
+

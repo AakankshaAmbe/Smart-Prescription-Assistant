@@ -1,0 +1,368 @@
+body {
+  font-family: 'Jost', sans-serif;
+  background: #f5f7fb;
+}
+
+/* ===== LAYOUT ===== */
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
+}
+
+/* ===== REMINDER LIST ===== */
+.reminder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== CARD ===== */
+.reminder-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  border-left: 6px solid #004795;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Header */
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.med-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #004795;
+}
+
+/* Medicine List */
+.reminder-card ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.reminder-card li {
+  margin-bottom: 5px;
+}
+
+/* Info Grid */
+.info-grid {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.info-box {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  background: #eef2ff;
+}
+
+.info-top {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #6b7280;
+}
+
+.value {
+  font-weight: bold;
+}
+
+/* Buttons */
+.icon-btn {
+  border: none;
+  background: #f3f4f6;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  color: red;
+}
+
+/* ===== MODAL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+.modal-box {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Medicine Selection UI */
+.medicine-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.medicine-item {
+  padding: 10px 15px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.medicine-item.active {
+  background: #004795;
+  color: white;
+  border-color: #004795;
+}
+
+.medicine-item:hover {
+  background: #e2e8f0;
+}
+
+/* ===== DAYS UI ===== */
+.days-section {
+    margin-top: 15px;
+}
+
+.days-title {
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.days-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.day-pill {
+    background: #004795;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ===== STATUS BOX ===== */
+.status-box {
+    margin-top: 12px;
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   MOBILE HEADER
+   ============================================================ */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    z-index: 1500;
+    padding: 10px 16px;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #004795;
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-family: 'Jost', sans-serif;
+}
+
+.mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mobile-logout-btn {
+    background: none;
+    border: 1px solid #004795;
+    color: #004795;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Jost', sans-serif;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.mobile-logout-btn:hover {
+    background: #004795;
+    color: white;
+}
+
+.mobile-add-btn {
+    background: #004795;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Jost', sans-serif;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.mobile-add-btn:hover {
+    background: #003570;
+}
+
+/* Mobile page title */
+.mobile-page-title {
+    display: none;
+}
+
+/* ============================================================
+   MOBILE BOTTOM NAV
+   ============================================================ */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    z-index: 2000;
+    padding: 6px 0 10px;
+}
+
+.mobile-bottom-nav .nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 10px;
+    color: #888;
+    text-decoration: none;
+    gap: 2px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    transition: 0.2s;
+    font-family: 'Jost', sans-serif;
+}
+
+.mobile-bottom-nav a i {
+    font-size: 20px;
+}
+
+.mobile-bottom-nav a.active,
+.mobile-bottom-nav a:hover {
+    color: #004795;
+}
+
+/* ============================================================
+   RESPONSIVE — nothing above changed, only added below
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Show mobile UI */
+    .mobile-header { display: flex; }
+    .mobile-bottom-nav { display: block; }
+    .mobile-page-title { display: block; }
+
+    /* Hide desktop sidebar and header bar */
+    .sidebar { display: none !important; }
+    .header-bar { display: none !important; }
+
+    /* Main content full width */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 75px 16px 90px !important;
+    }
+
+    /* Reminder cards full width */
+    .reminder-card {
+        padding: 16px !important;
+    }
+
+    .med-name {
+        font-size: 1.1rem !important;
+    }
+
+    /* Info grid: stack on very small screens */
+    .info-grid {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .info-box {
+        min-width: calc(50% - 5px) !important;
+        flex: unset !important;
+    }
+
+    /* Days pills wrap nicely */
+    .days-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .day-pill {
+        font-size: 0.75rem !important;
+        padding: 4px 10px !important;
+    }
+
+    /* Modal full screen on mobile */
+    .modal-box {
+        width: 95% !important;
+        max-width: 95% !important;
+        padding: 20px 16px !important;
+        max-height: 85vh !important;
+    }
+
+    /* Modal buttons full width */
+    .modal-box .text-end {
+        display: flex;
+        gap: 10px;
+    }
+
+    .modal-box .text-end .btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 400px) {
+    /* All 3 info boxes full width on very small screens */
+    .info-box {
+        min-width: 100% !important;
+    }
+}
