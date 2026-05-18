@@ -94,10 +94,7 @@ if (fileInput) {
     });
 }
 
-// ================= ANALYZE + OCR =================
-// ================= ANALYZE + OCR =================
-// ================= ANALYZE + PREVIEW (MATCHING YOUR BACKEND) =================
-
+// ================= ANALYZE + OCR (FIXED FOR RENDER) =================
 async function handleAnalyze() {
     const fileInput = document.getElementById("prescriptionFile");
     const resultBox = document.getElementById("resultBox");
@@ -119,14 +116,19 @@ async function handleAnalyze() {
     formData.append("file", file);
 
     try {
+        // ✅ FIX: Use current domain (works on localhost and Render)
+        const API_BASE_URL = window.location.origin;
+        
         let endpoint = "";
 
-        // ✅ SAME LOGIC AS upload.js
+        // SAME LOGIC AS upload.js
         if (file.type === "application/pdf") {
-            endpoint = "http://localhost:8000/prescription/upload-pdf";
+            endpoint = `${API_BASE_URL}/prescription/upload-pdf`;
         } else {
-            endpoint = "http://localhost:8000/prescription/upload-image";
+            endpoint = `${API_BASE_URL}/prescription/upload-image`;
         }
+
+        console.log("📤 Uploading to:", endpoint);
 
         const res = await fetch(endpoint, {
             method: "POST",
@@ -136,7 +138,7 @@ async function handleAnalyze() {
         const data = await res.json();
         console.log("🔥 PREVIEW RESPONSE:", data);
 
-        // 🚨 LOW CONFIDENCE CHECK
+        // LOW CONFIDENCE CHECK
         if (data.status === "low_confidence") {
             resultBox.innerHTML = `
                 <div class="alert alert-warning">
@@ -155,7 +157,7 @@ async function handleAnalyze() {
             return;
         }
 
-        // ✅ SAVE FULL DATA (IMPORTANT FOR AFTER LOGIN)
+        // SAVE FULL DATA (IMPORTANT FOR AFTER LOGIN)
         sessionStorage.setItem("previewData", JSON.stringify(data));
 
         if (!data.medicines || data.medicines.length === 0) {
@@ -163,76 +165,72 @@ async function handleAnalyze() {
             return;
         }
 
-        // ================= SHOW ONLY USES + SIDE EFFECTS =================
-        
         // ================= SHOW PREVIEW =================
-let html = `
-<div class="preview-wrapper">
+        let html = `
+        <div class="preview-wrapper">
 
-    <!-- HEADER -->
-    <div class="preview-header text-center mb-4">
-        <h3>🧾 Prescription Preview</h3>
-        <p class="text-muted">Basic info available for free. Unlock full details.</p>
-    </div>
-
-    <div class="medicine-list">
-`;
-
-data.medicines.forEach((m, index) => {
-
-    const isLocked = index >= 1; // only first 2 free
-
-    html += `
-        <div class="med-preview-card">
-
-            <div class="med-header">
-                <h5>💊 ${m.name || "Unknown Medicine"}</h5>
+            <!-- HEADER -->
+            <div class="preview-header text-center mb-4">
+                <h3>🧾 Prescription Preview</h3>
+                <p class="text-muted">Basic info available for free. Unlock full details.</p>
             </div>
 
-            <!-- FREE CONTENT -->
-            <div class="med-body">
-                <p><strong>📖 Uses:</strong> ${m.uses?.replace(/💊 Uses:|📖 Uses:/g, "").trim() || "Not available"}</p>
-              
+            <div class="medicine-list">
+        `;
+
+        data.medicines.forEach((m, index) => {
+            const isLocked = index >= 1; // only first 2 free
+
+            html += `
+                <div class="med-preview-card">
+
+                    <div class="med-header">
+                        <h5>💊 ${m.name || "Unknown Medicine"}</h5>
+                    </div>
+
+                    <!-- FREE CONTENT -->
+                    <div class="med-body">
+                        <p><strong>📖 Uses:</strong> ${m.uses?.replace(/💊 Uses:|📖 Uses:/g, "").trim() || "Not available"}</p>
+                    </div>
+
+                    <!-- LOCKED CONTENT -->
+                    <div class="${isLocked ? 'locked-content' : ''}">
+                        <p><span class="label">⚠️ Side Effects:</span> ${isLocked ? '********' : (m.side_effects?.replace(/⚠️ Side Effects:/g, "").trim() || "Not available")}</p>
+                        <p><span class="label">💊 Dosage:</span> ${isLocked ? '********' : (m.dosage || "N/A")}</p>
+                        <p><span class="label">⏰ Frequency:</span> ${isLocked ? '********' : (m.frequency || "N/A")}</p>
+                        <p><span class="label">📅 Duration:</span> ${isLocked ? '********' : (m.duration || "N/A")}</p>
+                        <p><span class="label">📌 Instructions:</span> ${isLocked ? '********' : (m.instruction || "N/A")}</p>
+
+                        ${isLocked ? `
+                        <div class="lock-layer">
+                            <div class="lock-icon">🔒</div>
+                            <p>Free limit reached</p>
+                        </div>` : ''}
+                    </div>
+
+                </div>
+            `;
+        });
+
+        html += `
             </div>
 
-            <!-- LOCKED CONTENT -->
-            <div class="${isLocked ? 'locked-content' : ''}">
-           <p><span class="label">⚠️ Side Effects:</span>${isLocked ? '********' : (m.side_effects?.replace(/⚠️ Side Effects:/g, "").trim() || "Not available")}</p>
-            <p><span class="label">💊 Dosage:</span> ${isLocked ? '********' : (m.dosage || "N/A")}</p>
-            <p><span class="label">⏰ Frequency:</span> ${isLocked ? '********' : (m.frequency || "N/A")}</p>
-            <p><span class="label">📅 Duration:</span> ${isLocked ? '********' : (m.duration || "N/A")}</p>
-            <p><span class="label">📌 Instructions:</span> ${isLocked ? '********' : (m.instruction || "N/A")}</p>
+            <!-- MESSAGE -->
+            <div class="text-center mt-3 text-danger fw-bold">
+                🔒 You've reached your free preview limit
+            </div>
 
-                ${isLocked ? `
-                <div class="lock-layer">
-                    <div class="lock-icon">🔒</div>
-                    <p>Free limit reached</p>
-                </div>` : ''}
+            <!-- GLOBAL CTA -->
+            <div class="unlock-global text-center mt-3">
+                <button class="unlock-btn" onclick="goToLoginForFullAccess()">
+                    🚀 Login to Unlock Full Prescription
+                </button>
             </div>
 
         </div>
-    `;
-});
+        `;
 
-html += `
-    </div>
-
-    <!-- MESSAGE -->
-    <div class="text-center mt-3 text-danger fw-bold">
-        🔒 You’ve reached your free preview limit
-    </div>
-
-    <!-- GLOBAL CTA -->
-    <div class="unlock-global text-center mt-3">
-        <button class="unlock-btn" onclick="goToLoginForFullAccess()">
-            🚀 Login to Unlock Full Prescription
-        </button>
-    </div>
-
-</div>
-`;
-
-resultBox.innerHTML = html;
+        resultBox.innerHTML = html;
 
     } catch (err) {
         console.error(err);
@@ -243,6 +241,7 @@ resultBox.innerHTML = html;
         `;
     }
 }
+
 // ================= NAVIGATION =================
 function goToLogin() {
     window.location.href = "/login.html";
@@ -251,10 +250,12 @@ function goToLogin() {
 function goToSignup() {
     window.location.href = "/signup.html";
 }
+
 function goToLoginForFullAccess() {
     sessionStorage.setItem("redirectAfterLogin", "true");
     window.location.href = "/login.html";
 }
+
 // ================= SCROLL =================
 function scrollToUpload() {
     document.getElementById("upload-section").scrollIntoView({

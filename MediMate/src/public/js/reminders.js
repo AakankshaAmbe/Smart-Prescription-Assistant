@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
 let editingId = null;
 let currentReminders = [];
 
+// ✅ Get API base URL (works on localhost and Render)
+function getApiBaseUrl() {
+    return window.location.origin;
+}
+
 // ================= MODAL =================
 function openAdd() {
     document.getElementById("reminderModal").style.display = "flex";
@@ -87,9 +92,10 @@ function generateTimeInputs(count) {
     }
 }
 
-// ================= SAVE =================
+// ================= SAVE (FIXED) =================
 async function saveReminder() {
-
+    const API_BASE_URL = getApiBaseUrl();
+    
     const medicineInput = document.getElementById("medicineName").value;
     const duration = document.getElementById("duration").value;
     const language = document.getElementById("language").value;
@@ -115,7 +121,7 @@ async function saveReminder() {
 
     if (editingId) {
         // UPDATE
-        await fetch(`/update-reminder/${editingId}`, {
+        await fetch(`${API_BASE_URL}/update-reminder/${editingId}`, {
             method: "PUT",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -133,7 +139,7 @@ async function saveReminder() {
 
     } else {
         // CREATE
-        await fetch('/add-reminder', {
+        await fetch(`${API_BASE_URL}/add-reminder`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -178,33 +184,33 @@ function formatDate(dateStr) {
     return d.toISOString().split("T")[0];
 }
 
-// ================= RENDER =================
+// ================= RENDER (FIXED) =================
 async function renderReminders() {
-
+    const API_BASE_URL = getApiBaseUrl();
     const list = document.getElementById("reminderList");
     list.innerHTML = "";
 
     const userId = localStorage.getItem("userId");
     if (!userId) return;
 
-    const res = await fetch(`/reminders?user_id=${userId}`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API_BASE_URL}/reminders?user_id=${userId}`);
+        const data = await res.json();
 
-    currentReminders = data;
+        currentReminders = data;
 
-    data.forEach((r) => {
+        data.forEach((r) => {
+            const times = Array.isArray(r.times) ? r.times : [];
+            const days = Array.isArray(r.days) ? r.days : [];
 
-        const times = Array.isArray(r.times) ? r.times : [];
-        const days = Array.isArray(r.days) ? r.days : [];
+            const timeHTML = times.map(t => `<div>${formatTime(t)}</div>`).join("");
+            const daysHTML = days.map(d => `<span class="day-pill">${d}</span>`).join("");
 
-        const timeHTML = times.map(t => `<div>${formatTime(t)}</div>`).join("");
-        const daysHTML = days.map(d => `<span class="day-pill">${d}</span>`).join("");
+            const medicinesHTML = r.medicines.map(med => `
+                <div class="med-name">${med}</div>
+            `).join("");
 
-        const medicinesHTML = r.medicines.map(med => `
-            <div class="med-name">${med}</div>
-        `).join("");
-
-        const card = `
+            const card = `
 <div class="reminder-card">
 
     <div class="card-head">
@@ -258,15 +264,18 @@ async function renderReminders() {
     </div>
 
 </div>
-        `;
+            `;
 
-        list.innerHTML += card;
-    });
+            list.innerHTML += card;
+        });
+    } catch (error) {
+        console.error("Error loading reminders:", error);
+        list.innerHTML = `<div class="alert alert-danger">Error loading reminders</div>`;
+    }
 }
 
 // ================= EDIT =================
 function editReminder(id) {
-
     const r = currentReminders.find(x => x.id === id);
     if (!r) return;
 
@@ -289,11 +298,13 @@ function editReminder(id) {
     openAdd();
 }
 
-// ================= DELETE =================
+// ================= DELETE (FIXED) =================
 async function deleteReminder(id) {
     if (!confirm("Delete reminder?")) return;
 
-    await fetch(`/delete-reminder/${id}`, {
+    const API_BASE_URL = getApiBaseUrl();
+
+    await fetch(`${API_BASE_URL}/delete-reminder/${id}`, {
         method: "DELETE"
     });
 
@@ -327,5 +338,3 @@ function getStatusBadge(status) {
     }
     return `<span style="color:orange; font-weight:600;">⏳ Pending</span>`;
 }
-
-// ================= AUTO REFRESH =================

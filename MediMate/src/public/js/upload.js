@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     uploadBtn.onclick = async () => {
-
         if (fileInput.files.length === 0) {
             nameDisplay.innerHTML = "Please select a file first!";
             nameDisplay.style.color = "red";
@@ -63,50 +62,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (userId) {
             formData.append("user_id", userId);
-        }  // ✅ ADD THIS LINE ONLY
+        }
+
         try {
-
+            // Get the current domain (works on localhost and Render)
+            const API_BASE_URL = window.location.origin;
+            
             let endpoint = "";
-
-            // ✅ decide route based on file type
+            
+            // Decide route based on file type
             if (file.type === "application/pdf") {
-                endpoint = "http://localhost:8000/prescription/upload-pdf";
+                endpoint = `${API_BASE_URL}/prescription/upload-pdf`;
             } else {
-                endpoint = "http://localhost:8000/prescription/upload-image";
+                endpoint = `${API_BASE_URL}/prescription/upload-image`;
             }
 
-          const res = await fetch(endpoint, {
-            method: "POST",
-            body: formData
-        });
+            console.log("📤 Uploading to:", endpoint);
 
-        const data = await res.json();
+            const res = await fetch(endpoint, {
+                method: "POST",
+                body: formData
+            });
 
-        console.log("🔥 BACKEND RESPONSE:", data);
+            const data = await res.json();
 
-        // 🚨 HANDLE STATUS FIRST
-        if (data.status === "low_confidence") {
-            nameDisplay.innerHTML = "⚠ Image unclear. Try again.";
-            uploadBtn.disabled = false;
-            return;
-        }
+            console.log("🔥 BACKEND RESPONSE:", data);
 
-        // ❌ If API failed
-        if (!res.ok) {
-            nameDisplay.innerHTML = "❌ Server error";
-            uploadBtn.disabled = false;
-            return;
-        }
+            // Handle low confidence case
+            if (data.status === "low_confidence") {
+                nameDisplay.innerHTML = "⚠ Image unclear. Try again.";
+                uploadBtn.disabled = false;
+                return;
+            }
 
-        // ✅ SAVE ONLY VALID DATA
-        localStorage.setItem("medResults", JSON.stringify(data));
+            // If API failed
+            if (!res.ok) {
+                nameDisplay.innerHTML = "❌ Server error";
+                uploadBtn.disabled = false;
+                return;
+            }
 
-        // ✅ REDIRECT
-        window.location.href = "/results.html";
+            // Save valid data
+            localStorage.setItem("medResults", JSON.stringify(data));
+
+            // Redirect to results page
+            window.location.href = "/results.html";
 
         } catch (err) {
-            console.error(err);
-            nameDisplay.innerHTML = "❌ Error analyzing prescription";
+            console.error("Upload error:", err);
+            nameDisplay.innerHTML = "❌ Error analyzing prescription. Please try again.";
         }
 
         uploadBtn.disabled = false;

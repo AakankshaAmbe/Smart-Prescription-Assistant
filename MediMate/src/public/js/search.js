@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const params = new URLSearchParams(window.location.search);
     const drugName = params.get("drug");
-        // =========================
+    
+    // =========================
     // SIDEBAR LOGIC (FIXED)
     // =========================
     const sidebar = document.getElementById('sidebar');
@@ -44,7 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
         resultDiv.innerHTML = "⏳ Searching...";
 
         try {
-            const response = await fetch("http://127.0.0.1:8000/search-medicine", {
+            // ✅ FIX: Use current domain instead of hardcoded localhost
+            const API_BASE_URL = window.location.origin;
+            
+            const response = await fetch(`${API_BASE_URL}/search-medicine`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -79,10 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
             resultDiv.innerHTML = "❌ Backend error";
         }
     };
-     if (drugName) {
+    
+    if (drugName) {
         const inputBox = document.getElementById("searchInput");
         inputBox.value = drugName;
-
         searchMedicine(); // now safe ✅
     }
 });

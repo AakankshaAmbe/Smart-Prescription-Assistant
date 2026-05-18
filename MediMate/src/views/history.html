@@ -11,20 +11,6 @@
 </head>
 <body>
 
-<!-- ================= MOBILE HEADER (only visible on mobile) ================= -->
-<!-- ================= MOBILE HEADER ================= -->
-<div class="mobile-header" id="mobileHeader">
-    <div class="mobile-logo">
-        <i class="bi bi-heart-fill"></i>
-        <span>MediMate</span>
-    </div>
-    <div class="mobile-header-right">
-        <a href="/" class="mobile-logout-btn" id="logoutBtnMobile">
-            <i class="bi bi-box-arrow-left"></i> Logout
-        </a>
-    </div>
-</div>
-
 <div class="sidebar" id="sidebar">
     <div class="logo-section">
         <i class="bi bi-heart-fill"></i>
@@ -97,7 +83,6 @@
                 <label><i class="bi bi-search"></i> Search</label>
                 <input type="text" id="searchInput" placeholder="Search by filename, doctor, medicine...">
             </div>
-            <!-- ✅ Single specific date picker -->
             <div class="filter-group">
                 <label><i class="bi bi-calendar"></i> Date</label>
                 <input type="date" id="dateFilter">
@@ -120,36 +105,6 @@
             <i class="bi bi-arrow-repeat spin"></i><br>
             Loading prescriptions...
         </div>
-    </div>
-</div>
-
-<!-- ========== MOBILE BOTTOM NAV ========== -->
-<div class="mobile-bottom-nav">
-    <div class="nav-items">
-        <a href="/dashboard.html">
-            <i class="bi bi-grid-fill"></i>
-            <span>Dashboard</span>
-        </a>
-        <a href="/upload_prescription.html">
-            <i class="bi bi-upload"></i>
-            <span>Upload</span>
-        </a>
-        <a href="/results.html">
-            <i class="bi bi-file-text"></i>
-            <span>Results</span>
-        </a>
-        <a href="/reminders.html">
-            <i class="bi bi-bell-fill"></i>
-            <span>Reminders</span>
-        </a>
-        <a href="/history.html" class="active">
-            <i class="bi bi-clock-history"></i>
-            <span>History</span>
-        </a>
-        <a href="/search.html">
-            <i class="bi bi-search"></i>
-            <span>Search</span>
-        </a>
     </div>
 </div>
 
@@ -201,13 +156,14 @@
 </div>
 
 <script>
-const API_BASE_URL = "http://localhost:8000";
-const NODE_BASE_URL = "http://localhost:3000";
+// ✅ FIXED: Use current domain (works on localhost and Render)
+const API_BASE_URL = window.location.origin;
+const NODE_BASE_URL = window.location.origin;
 let allPrescriptions = [];
 let pendingDeleteId = null;
 
 // =========================
-// SIDEBAR TOGGLE (ADD THIS)
+// SIDEBAR TOGGLE
 // =========================
 const sidebar = document.getElementById('sidebar');
 const mainContent = document.getElementById('mainContent');
@@ -230,22 +186,10 @@ if (closeBtn && openBtn) {
         openBtn.classList.add('d-none');
     };
 }
-
 // ============ LOGOUT ============
 const logoutBtn = document.getElementById('logoutBtn');
 if (logoutBtn) {
     logoutBtn.onclick = (e) => {
-        e.preventDefault();
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.href = "/";
-    };
-}
-
-// ✅ MOBILE LOGOUT
-const logoutBtnMobile = document.getElementById('logoutBtnMobile');
-if (logoutBtnMobile) {
-    logoutBtnMobile.onclick = (e) => {
         e.preventDefault();
         localStorage.clear();
         sessionStorage.clear();
@@ -310,6 +254,7 @@ function applyFilters() {
 
     let filtered = [...allPrescriptions];
 
+    // Search filter
     if (term) {
         filtered = filtered.filter(p =>
             p.displayName.toLowerCase().includes(term) ||
@@ -318,6 +263,7 @@ function applyFilters() {
         );
     }
 
+    // Specific date filter — match exact date
     if (dateFilter) {
         filtered = filtered.filter(p => {
             const uploadDate = new Date(p.upload_date).toISOString().split('T')[0];
@@ -325,6 +271,7 @@ function applyFilters() {
         });
     }
 
+    // Status filter
     if (status) {
         filtered = filtered.filter(p => p.prescription_data?.status === status);
     }
@@ -332,7 +279,7 @@ function applyFilters() {
     renderTimeline(filtered);
 }
 
-// ============ LOAD PRESCRIPTIONS ============
+// ============ LOAD PRESCRIPTIONS (FIXED) ============
 async function loadPrescriptions() {
     try {
         const userId = localStorage.getItem('userId');
@@ -349,6 +296,7 @@ async function loadPrescriptions() {
         console.log('Raw data from server:', data);
 
         allPrescriptions = data.map(p => {
+            // Handle medicines - could be array or object
             let medicinesList = [];
             if (p.medicines) {
                 if (Array.isArray(p.medicines)) {
@@ -364,6 +312,7 @@ async function loadPrescriptions() {
                 }
             }
             
+            // Extract medicine names
             const medicineNames = medicinesList.map(m => {
                 if (typeof m === 'object' && m !== null) {
                     return m.name || m.medicine || Object.values(m)[0] || 'Unknown';
@@ -482,7 +431,7 @@ function renderTimeline(prescriptions) {
     container.innerHTML = html;
 }
 
-// ============ RENDER CARD ============
+// ============ RENDER CARD (FIXED) ============
 function renderCard(p) {
     const isPDF = p.file_type === 'application/pdf';
     const ext = isPDF ? 'PDF' : 'IMAGE';
@@ -559,7 +508,7 @@ function renderCard(p) {
         </div>`;
 }
 
-// ============ VIEW MODAL ============
+// ============ VIEW MODAL (FIXED) ============
 function viewPrescription(id, storedName, displayName, type) {
     const modal     = document.getElementById('previewModal');
     const modalBody = document.getElementById('modalBody');
@@ -586,7 +535,7 @@ function closeModal() {
     document.getElementById('modalBody').innerHTML = '';
 }
 
-// ============ DELETE ============
+// ============ DELETE (FIXED) ============
 function confirmDelete(id, name) {
     pendingDeleteId = id;
     document.getElementById('deleteFileName').textContent = `"${name}"`;
@@ -666,7 +615,5 @@ document.getElementById('deleteModal').addEventListener('click', e => {
 loadPrescriptions();
 </script>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

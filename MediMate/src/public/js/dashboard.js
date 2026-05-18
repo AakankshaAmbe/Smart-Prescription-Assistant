@@ -50,10 +50,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // =======================
-    // 🔥 FETCH DASHBOARD DATA
+    // 🔥 FETCH DASHBOARD DATA (FIXED)
     // =======================
     if (userId) {
-        const res = await fetch(`/dashboard-stats?user_id=${userId}`);
+        // ✅ FIX: Use current domain
+        const API_BASE_URL = window.location.origin;
+        
+        const res = await fetch(`${API_BASE_URL}/dashboard-stats?user_id=${userId}`);
         const data = await res.json();
 
         if (data.success) {
@@ -73,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             else status.innerText = "⚠ Improve";
 
             initBarChart(d.weeklyChart);
-           initLineChart(d.weeklyChart);
+            initLineChart(d.weeklyChart);
             showPrediction(d.prediction);
         }
     }
@@ -134,7 +137,6 @@ function initBarChart(chartData) {
 
 // ================= DONUT CHART (NEW UNIQUE) =================
 function initDonutChart(adherence) {
-
     new Chart(document.getElementById('lineChart'), {
         type: 'doughnut',
         data: {
@@ -181,10 +183,8 @@ function animateCards() {
 
 // ================= RIPPLE CLICK EFFECT =================
 function addRippleEffect() {
-
     document.querySelectorAll('.stat-card').forEach(card => {
         card.addEventListener('click', function (e) {
-
             const ripple = document.createElement("span");
             ripple.classList.add("ripple");
 
@@ -198,9 +198,10 @@ function addRippleEffect() {
         });
     });
 }
+
+
 // ================= LINE CHART =================
 function initLineChart(chartData) {
-
     const labels = chartData.map(d => d.day);
 
     const adherence = chartData.map(d => {
@@ -233,7 +234,6 @@ function initLineChart(chartData) {
 
 // ================= AI PREDICTION UI =================
 function showPrediction(pred) {
-
     const card = document.createElement("div");
     card.className = "stat-card";
     card.style.marginTop = "20px";
